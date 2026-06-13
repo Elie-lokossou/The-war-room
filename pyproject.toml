@@ -1,0 +1,13 @@
+[project]
+name = "war-room"
+version = "0.1.0"
+description = "Incident Response War Room"
+requires-python = ">=3.10"
+dependencies = [
+    "band-sdk",
+    "band-sdk[langgraph]",
+    "band-sdk[crewai]",
+    "band-sdk[anthropic]",
+    "band-sdk[pydantic-ai]",
+    "band-sdk[claude_sdk]"
+]

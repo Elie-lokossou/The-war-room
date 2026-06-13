@@ -1,0 +1,21 @@
+agents:
+  - name: commander
+    description: "Incident Commander (LangGraph)"
+    model_type: "langgraph"
+    system_prompt: "Coordinate the overall incident response, synthesize data, and output conclusions."
+  - name: metrics-agent
+    description: "Metrics Agent (CrewAI)"
+    model_type: "crewai"
+    system_prompt: "Analyze system metrics and highlight anomalies."
+  - name: logs-agent
+    description: "Logs & Traces Agent (Anthropic SDK)"
+    model_type: "anthropic"
+    system_prompt: "Parse through application logs and trace requests for potential issues."
+  - name: change-agent
+    description: "Change Agent (Pydantic AI)"
+    model_type: "pydantic-ai"
+    system_prompt: "Track and analyze recent deployments and configuration changes."
+  - name: runbook-agent
+    description: "Runbook Agent (Claude SDK)"
+    model_type: "claude_sdk"
+    system_prompt: "Analyze current state and match against known runbooks; recommend mitigation steps."

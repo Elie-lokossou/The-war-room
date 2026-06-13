@@ -1,0 +1,15 @@
+channels:
+  - name: incident-events
+    description: "Events triggering an incident"
+  - name: agent-registry
+    description: "Directory of active agents"
+  - name: triage-tasks
+    description: "Tasks assigned during triage"
+  - name: triage-findings
+    description: "Findings reported by agents"
+  - name: deliberation
+    description: "Discussion space for agents"
+  - name: commander-verdict
+    description: "Final decisions from the incident commander"
+  - name: errors
+    description: "System and agent errors"
