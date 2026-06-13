@@ -9,7 +9,7 @@ The War Room is an AI-driven, multi-agent Incident Response platform demonstrati
 - `band/`: Contains agent schema bindings and channel setups.
 - `demo/`: Scripts for presenting the workflow.
 
-## Progress (Phase 1)
+## Progress (Phase 0)
 - [x] Initial directory scaffolding & project setup
 - [x] Configured dependency mapping via `pyproject.toml`
 - [x] Defined unified message schemas via Pydantic model configurations (`IncidentAlert`, `TriageTask`, `Finding`, etc.)
