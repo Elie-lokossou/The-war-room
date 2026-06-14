@@ -67,6 +67,10 @@ def handle_task(envelope):
     """
     payload = envelope["payload"]
     task = TriageTask(**payload)
+    
+    if task.assigned_to != "@change-agent":
+        return
+        
     severity = _extract_severity(task)
     result = analyze(task, severity)
 

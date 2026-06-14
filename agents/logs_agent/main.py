@@ -47,6 +47,10 @@ def _extract_severity(task: TriageTask) -> Severity:
 def handle_task(envelope):
     payload = envelope["payload"]
     task = TriageTask(**payload)
+    
+    if task.assigned_to != "@logs-agent":
+        return
+        
     severity = _extract_severity(task)
     result = analyze(task, severity)
     band.publish("triage-findings", result.model_dump(), "logs-agent")
