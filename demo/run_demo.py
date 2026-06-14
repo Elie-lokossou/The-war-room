@@ -169,14 +169,25 @@ def main():
     if verdict_queue:
         payload = verdict_queue[0]["payload"]
         verdict_desc = payload["verdict"]
-        actions = payload["actions_to_take"]
+        actions = payload["remediation"]
 
         print(f"\n{BOLD}{GREEN}[VERDICT] Commander Verdict Formulated:{RESET}")
         print(f"  - {BOLD}Incident ID:{RESET} {payload['incident_id']}")
+        print(f"  - {BOLD}Status:{RESET} {YELLOW}{payload['status'].upper()}{RESET} (confidence={payload['confidence']:.2f})")
+        print(f"  - {BOLD}Severity:{RESET} {payload['severity']}")
         print(f"  - {BOLD}Verdict:{RESET} {YELLOW}{verdict_desc}{RESET}")
+        print(f"  - {BOLD}Root Cause:{RESET} {payload['root_cause']}")
         print(f"  - {BOLD}Actions Recommended:{RESET}")
         for idx, act in enumerate(actions):
             print(f"    {idx+1}. {act}")
+        print(f"  - {BOLD}Evidence IDs:{RESET} {', '.join(payload['evidence_ids'])}")
+        print(f"  - {BOLD}Deliberation Summary:{RESET} {payload['deliberation_summary']}")
+
+        print_header("STAGE 6: GENERATED ARTIFACTS")
+        print(f"{BOLD}{CYAN}-- Status Page Update --{RESET}")
+        print(payload["status_page"])
+        print(f"\n{BOLD}{CYAN}-- Draft Postmortem --{RESET}")
+        print(payload["draft_postmortem"])
     else:
         print(f"\n{BOLD}{RED}No verdict published by the Commander.{RESET}")
 

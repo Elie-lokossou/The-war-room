@@ -19,11 +19,20 @@
 - Publishes a verdict to `commander-verdict` channel
 - Deliberation channel becomes read-write: agents discuss before verdict
 
-## Phase 4 — Multi-Agent Coordination
-- Wire LangGraph/CrewAI flows (already in `pyproject.toml`)
-- Agent registry for discovery
-- Agents cross-reference findings (e.g. "logs saw 5xx + change saw deploy = root cause")
-- Escalation paths between agents
+## Phase 4 — Evidence + Scoring + Artifact System ✅
+- `lib/evidence.py`: in-memory `EvidenceStore` — every finding, deliberation message,
+  and verdict is recorded as `Evidence` (id, incident_id, agent, type, content, timestamp)
+- `lib/scorer.py`: `compute_confidence()` — weighted average of agent confidences
+  (Metrics 0.25, Logs 0.25, Change 0.25, Runbook 0.15, Deliberation 0.10) with
+  AGREE/CHALLENGE/CONNECT/SURFACE bonuses/penalties; `gate()` maps confidence to
+  resolved (>=0.80) / mitigating (>=0.50) / escalated (<0.50)
+- `lib/artifact_generator.py`: renders `draft_postmortem` (markdown) and `status_page`
+  text from root cause, severity, remediation, and the evidence trail
+- Commander's `generate_verdict()` now publishes a full `CommanderVerdict`: status,
+  root_cause, severity (SEV-1/2/3), confidence, remediation, draft_postmortem,
+  status_page, evidence_ids, deliberation_summary
+- Files: `lib/evidence.py`, `lib/scorer.py`, `lib/artifact_generator.py`,
+  `agents/commander/main.py`
 
 ## Phase 5 — Real Data Pipeline
 - Replace keyword-scanning with real data sources

@@ -10,8 +10,11 @@ class Severity(IntEnum):
 
 class Evidence(BaseModel):
     id: str
-    source: str
+    incident_id: str
+    agent: str
+    type: str  # "finding" | "deliberation" | "verdict"
     content: Any
+    timestamp: str
 
 class IncidentAlert(BaseModel):
     id: str
@@ -47,5 +50,14 @@ class DeliberationMessage(BaseModel):
 
 class CommanderVerdict(BaseModel):
     incident_id: str
+    status: str  # "resolved" | "mitigating" | "escalated"
     verdict: str
-    actions_to_take: List[str]
+    root_cause: str
+    severity: str  # "SEV-1" | "SEV-2" | "SEV-3"
+    confidence: float
+    remediation: List[str]
+    draft_postmortem: str
+    status_page: str
+    evidence_ids: List[str] = []
+    deliberation_summary: Dict[str, int] = {}
+    timestamp: str

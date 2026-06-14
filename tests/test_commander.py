@@ -1,5 +1,6 @@
 from lib.band_client import BandClientWrapper
 from lib.models import IncidentAlert, Severity
+from lib import evidence
 
 
 class TestCommander:
@@ -86,7 +87,7 @@ class TestCommander:
         # 1. Trigger Alert
         alert = IncidentAlert(id="alert-999", title="Test Outage", description="Test", severity=Severity.CRITICAL)
         handle_alert({"payload": alert.model_dump()})
-        
+
         # Get the incident_id
         incident_id = list(self.band.message_queue["triage-tasks"])[0]["payload"]["incident_id"]
 
@@ -105,7 +106,19 @@ class TestCommander:
         # 3. Check Verdict
         verdicts = self.band.message_queue.get("commander-verdict", [])
         assert len(verdicts) > 0
-        assert "RESOLVED" in verdicts[0]["payload"]["verdict"]
+        payload = verdicts[0]["payload"]
+        assert "RESOLVED" in payload["verdict"]
+
+        # 4. Check Phase 4 artifact fields are populated
+        assert payload["incident_id"] == incident_id
+        assert payload["status"] in ("resolved", "mitigating", "escalated")
+        assert payload["severity"] == "SEV-1"  # CRITICAL alert -> SEV-1
+        assert 0.0 <= payload["confidence"] <= 1.0
+        assert len(payload["evidence_ids"]) == 4
+        assert all(eid.startswith("EVD-") for eid in payload["evidence_ids"])
+        assert f"## Postmortem: {incident_id}" in payload["draft_postmortem"]
+        assert payload["status_page"]
+        assert payload["deliberation_summary"] == {"agreed": 0, "challenged": 0, "connected": 0, "surfaced": 0}
 
     def test_generates_critical_verdict_on_deployment_error(self):
         """Commander should suggest rollback if logs report errors AND change agent reports a deploy."""
@@ -136,4 +149,52 @@ class TestCommander:
         assert len(verdicts) > 0
         payload = verdicts[0]["payload"]
         assert "CRITICAL" in payload["verdict"]
-        assert "Rollback" in str(payload["actions_to_take"])
+        assert "Rollback" in str(payload["remediation"])
+        assert "deployment" in payload["root_cause"].lower()
+        assert "Rollback last deployment" in payload["draft_postmortem"]
+
+    def test_deliberation_resolves_challenge_and_boosts_confidence(self):
+        """A CHALLENGE resolved via CONNECT/AGREE should push the verdict to 'resolved'."""
+        from agents.commander.main import handle_alert, handle_finding
+        from lib.models import Finding
+
+        # 1. Trigger Alert
+        alert = IncidentAlert(id="alert-pool", title="API Gateway Latency Spike", description="P99 latency spike", severity=Severity.HIGH)
+        handle_alert({"payload": alert.model_dump()})
+
+        incident_id = list(self.band.message_queue["triage-tasks"])[0]["payload"]["incident_id"]
+
+        # 2. Council deliberation: CHALLENGE resolved by AGREE + CONNECT, plus a SURFACE
+        deliberation_messages = [
+            {"sender": "logs-agent", "content": f"@metrics-agent CHALLENGE - no slow queries in logs for {incident_id}, it's pool exhaustion."},
+            {"sender": "metrics-agent", "content": f"@logs-agent AGREE - pool usage at 98% confirms for {incident_id}."},
+            {"sender": "change-agent", "content": f"@metrics-agent @logs-agent CONNECT - deploy #847 reduced pool size for {incident_id}."},
+            {"sender": "runbook-agent", "content": f"SURFACE - runbook for {incident_id} is stale."},
+        ]
+        for msg in deliberation_messages:
+            self.band.publish("deliberation", msg, msg["sender"])
+
+        # 3. Simulate 4 high-confidence findings
+        confidences = {"metrics-agent": 0.89, "logs-agent": 0.85, "change-agent": 0.80, "runbook-agent": 0.75}
+        for agent, conf in confidences.items():
+            finding = Finding(
+                finding_id=f"f-{agent}",
+                task_id="task-123",
+                agent=agent,
+                value="normal",
+                confidence=conf,
+                summary=f"Analysis for {incident_id}",
+            )
+            handle_finding({"payload": finding.model_dump()})
+
+        # 4. Verdict reflects deliberation outcomes
+        verdicts = self.band.message_queue.get("commander-verdict", [])
+        payload = verdicts[0]["payload"]
+        assert payload["deliberation_summary"] == {"agreed": 1, "challenged": 1, "connected": 1, "surfaced": 1}
+        assert payload["status"] == "resolved"
+        assert payload["confidence"] == 1.0
+
+        # 5. Evidence trail covers findings + deliberation messages
+        trail = evidence.store.get_evidence_trail(incident_id)
+        assert len(trail) == 4 + 4 + 1  # 4 findings + 4 deliberation msgs + 1 verdict
+        assert {e["type"] for e in trail} == {"finding", "deliberation", "verdict"}
