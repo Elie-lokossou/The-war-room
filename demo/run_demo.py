@@ -52,6 +52,7 @@ def main():
     shared_band.subscribe("triage-tasks", logs_agent.handle_task)
     shared_band.subscribe("triage-tasks", change_agent.handle_task)
     shared_band.subscribe("triage-tasks", runbook_agent.handle_task)
+    shared_band.subscribe("triage-findings", commander_agent.handle_finding)
 
     print_header("THE WAR ROOM - MULTI-AGENT INCIDENT RESPONSE SIMULATION")
     
@@ -157,24 +158,27 @@ def main():
     print_header("STAGE 5: INCIDENT VERDICT & RESOLUTION COORDINATION")
     
     print_agent_log("Commander", "Synthesizing triage reports and runbook recommendations...", BLUE)
+    
+    # Poll triage-findings so the commander processes them and generates a verdict
+    while shared_band.message_queue.get("triage-findings"):
+        shared_band.poll("triage-findings")
+        
     time.sleep(1.5)
 
-    verdict_desc = (
-        "Potential API Gateway degradation caused by a database lock or query latency. "
-        "Recommend immediate scale-up of DB read replicas and rollback of the last release configuration."
-    )
-    actions = [
-        "Scale DB read-replicas to 3x",
-        "Enable caching layer on API Gateway endpoints",
-        "Notify On-Call SRE Team via PagerDuty"
-    ]
+    verdict_queue = shared_band.message_queue.get("commander-verdict", [])
+    if verdict_queue:
+        payload = verdict_queue[0]["payload"]
+        verdict_desc = payload["verdict"]
+        actions = payload["actions_to_take"]
 
-    print(f"\n{BOLD}{GREEN}[VERDICT] Commander Verdict Formulated:{RESET}")
-    print(f"  - {BOLD}Incident ID:{RESET} {alert.id}")
-    print(f"  - {BOLD}Verdict:{RESET} {verdict_desc}")
-    print(f"  - {BOLD}Actions Recommended:{RESET}")
-    for idx, act in enumerate(actions):
-        print(f"    {idx+1}. {act}")
+        print(f"\n{BOLD}{GREEN}[VERDICT] Commander Verdict Formulated:{RESET}")
+        print(f"  - {BOLD}Incident ID:{RESET} {payload['incident_id']}")
+        print(f"  - {BOLD}Verdict:{RESET} {YELLOW}{verdict_desc}{RESET}")
+        print(f"  - {BOLD}Actions Recommended:{RESET}")
+        for idx, act in enumerate(actions):
+            print(f"    {idx+1}. {act}")
+    else:
+        print(f"\n{BOLD}{RED}No verdict published by the Commander.{RESET}")
 
     print(f"\n{BOLD}{GREEN}=== SIMULATION COMPLETE ==={RESET}\n")
 
