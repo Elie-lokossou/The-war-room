@@ -21,9 +21,13 @@ class EvidenceStore:
 AGENT_PREFIXES = {
     "commander": "CM",
     "metrics-agent": "MT",
+    "metrics_agent": "MT",
     "logs-agent": "LG",
+    "logs_agent": "LG",
     "change-agent": "CH",
-    "runbook-agent": "RB"
+    "change_agent": "CH",
+    "runbook-agent": "RB",
+    "runbook_agent": "RB",
 }
 
 # Global in-memory store

@@ -4,6 +4,7 @@ version = "0.1.0"
 description = "Incident Response War Room"
 requires-python = ">=3.10"
 dependencies = [
+    "pydantic>=2.0",
     "band-sdk",
     "band-sdk[langgraph]",
     "band-sdk[crewai]",
@@ -11,3 +12,6 @@ dependencies = [
     "band-sdk[pydantic-ai]",
     "band-sdk[claude_sdk]"
 ]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]

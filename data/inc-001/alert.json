@@ -1,0 +1,6 @@
+{
+  "id": "alert-001",
+  "title": "API Gateway Latency Spike",
+  "description": "P99 latency spiked to 2450ms on api-gateway service",
+  "severity": 3
+}
