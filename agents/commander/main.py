@@ -118,7 +118,8 @@ def generate_verdict(incident_id: str):
 def handle_alert(envelope):
     payload = envelope["payload"]
     alert = IncidentAlert(**payload)
-    incident_id = f"inc-{str(uuid.uuid4())[:8]}"
+    incident_id = payload.get("incident_id") or f"inc-{str(uuid.uuid4())[:8]}"
+    service = payload.get("service", "unknown-service")
 
     expected_agents = ["metrics-agent", "logs-agent", "change-agent", "runbook-agent"]
 
@@ -126,8 +127,12 @@ def handle_alert(envelope):
     incident_cache[incident_id] = {
         "findings": [],
         "expected": len(expected_agents),
-        "alert": alert
+        "alert": alert,
+        "service": service,
     }
+
+    data_path = f"data/{incident_id}/"
+    time_window = payload.get("time_window", "")
 
     for agent_label in [f"@{a}" for a in expected_agents]:
         task = TriageTask(
@@ -135,6 +140,8 @@ def handle_alert(envelope):
             incident_id=incident_id,
             assigned_to=agent_label,
             description=f"Triage {alert.title}: {alert.description}",
+            data_path=data_path,
+            time_window=time_window,
         )
         band.publish("triage-tasks", task.model_dump(), "commander")
         band.send_message(

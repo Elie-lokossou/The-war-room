@@ -1,0 +1,17 @@
+{"timestamp": "2026-06-12T14:28:30Z", "level": "INFO", "service": "api-gateway", "message": "Request processed in 118ms", "trace_id": "aaa001", "status_code": 200}
+{"timestamp": "2026-06-12T14:29:10Z", "level": "INFO", "service": "api-gateway", "message": "Request processed in 122ms", "trace_id": "aaa002", "status_code": 200}
+{"timestamp": "2026-06-12T14:29:55Z", "level": "INFO", "service": "api-gateway", "message": "Request processed in 115ms", "trace_id": "aaa003", "status_code": 200}
+{"timestamp": "2026-06-12T14:30:45Z", "level": "INFO", "service": "api-gateway", "message": "Request processed in 125ms", "trace_id": "aaa004", "status_code": 200}
+{"timestamp": "2026-06-12T14:31:08Z", "level": "ERROR", "service": "api-gateway", "message": "ConnectionPoolExhaustedException: no connections available in pool (size=10, waiting=47)", "trace_id": "bbb001", "exception": "ConnectionPoolExhaustedException", "status_code": 503}
+{"timestamp": "2026-06-12T14:31:15Z", "level": "ERROR", "service": "api-gateway", "message": "ConnectionPoolExhaustedException: no connections available in pool (size=10, waiting=52)", "trace_id": "bbb002", "exception": "ConnectionPoolExhaustedException", "status_code": 503}
+{"timestamp": "2026-06-12T14:31:22Z", "level": "WARN", "service": "api-gateway", "message": "Query timeout after 2000ms on /api/v1/users", "trace_id": "ccc001"}
+{"timestamp": "2026-06-12T14:31:29Z", "level": "ERROR", "service": "api-gateway", "message": "ConnectionPoolExhaustedException: no connections available in pool (size=10, waiting=61)", "trace_id": "bbb003", "exception": "ConnectionPoolExhaustedException", "status_code": 503}
+{"timestamp": "2026-06-12T14:31:36Z", "level": "WARN", "service": "api-gateway", "message": "Query timeout after 2000ms on /api/v1/orders", "trace_id": "ccc002"}
+{"timestamp": "2026-06-12T14:31:44Z", "level": "ERROR", "service": "api-gateway", "message": "ConnectionPoolExhaustedException: no connections available in pool (size=10, waiting=58)", "trace_id": "bbb004", "exception": "ConnectionPoolExhaustedException", "status_code": 503}
+{"timestamp": "2026-06-12T14:31:52Z", "level": "ERROR", "service": "api-gateway", "message": "ConnectionPoolExhaustedException: no connections available in pool (size=10, waiting=63)", "trace_id": "bbb005", "exception": "ConnectionPoolExhaustedException", "status_code": 503}
+{"timestamp": "2026-06-12T14:32:05Z", "level": "WARN", "service": "api-gateway", "message": "Query timeout after 2000ms on /api/v1/products", "trace_id": "ccc003"}
+{"timestamp": "2026-06-12T14:32:18Z", "level": "INFO", "service": "api-gateway", "message": "Request processed in 2380ms", "trace_id": "ddd001", "status_code": 200}
+{"timestamp": "2026-06-12T14:32:45Z", "level": "INFO", "service": "api-gateway", "message": "Request processed in 2510ms", "trace_id": "ddd002", "status_code": 200}
+{"timestamp": "2026-06-12T14:33:10Z", "level": "INFO", "service": "api-gateway", "message": "Request processed in 2290ms", "trace_id": "ddd003", "status_code": 200}
+{"timestamp": "2026-06-12T14:34:55Z", "level": "INFO", "service": "api-gateway", "message": "Request processed in 165ms", "trace_id": "eee001", "status_code": 200}
+{"timestamp": "2026-06-12T14:35:10Z", "level": "INFO", "service": "api-gateway", "message": "Request processed in 142ms", "trace_id": "eee002", "status_code": 200}

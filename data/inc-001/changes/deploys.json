@@ -1,0 +1,45 @@
+{
+  "incident_id": "inc-001",
+  "service": "api-gateway",
+  "incident_start": "2026-06-12T14:31:00Z",
+  "deploys": [
+    {
+      "deploy_id": "845",
+      "timestamp": "2026-06-11T09:15:00Z",
+      "description": "Add request tracing headers",
+      "author": "alice",
+      "diff": {"tracing.enabled": {"before": false, "after": true}},
+      "rollback_deploy_id": null
+    },
+    {
+      "deploy_id": "846",
+      "timestamp": "2026-06-12T12:00:00Z",
+      "description": "Routine dependency version bump",
+      "author": "deploy-bot",
+      "diff": {"deps.pydantic": {"before": "2.6.0", "after": "2.7.1"}},
+      "rollback_deploy_id": null
+    },
+    {
+      "deploy_id": "847",
+      "timestamp": "2026-06-12T14:30:00Z",
+      "description": "Update connection pool configuration for memory optimization",
+      "author": "deploy-bot",
+      "diff": {
+        "pool.maxSize": {"before": 50, "after": 10},
+        "pool.minIdle": {"before": 5, "after": 2}
+      },
+      "rollback_deploy_id": "848"
+    },
+    {
+      "deploy_id": "848",
+      "timestamp": "2026-06-12T14:33:00Z",
+      "description": "ROLLBACK: Revert deploy #847 — connection pool exhaustion",
+      "author": "on-call-engineer",
+      "diff": {
+        "pool.maxSize": {"before": 10, "after": 50},
+        "pool.minIdle": {"before": 2, "after": 5}
+      },
+      "rollback_deploy_id": null
+    }
+  ]
+}

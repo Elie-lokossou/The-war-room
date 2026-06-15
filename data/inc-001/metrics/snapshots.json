@@ -1,0 +1,96 @@
+{
+  "incident_id": "inc-001",
+  "service": "api-gateway",
+  "baseline_window": "14:00-14:30",
+  "incident_window": "14:31-14:35",
+  "snapshots": [
+    {
+      "timestamp": "2026-06-12T14:28:00Z",
+      "p50_latency_ms": 62,
+      "p95_latency_ms": 105,
+      "p99_latency_ms": 118,
+      "error_rate_pct": 0.08,
+      "cpu_pct": 38,
+      "memory_pct": 65,
+      "connection_pool_usage_pct": 38,
+      "baseline_p99_ms": 120
+    },
+    {
+      "timestamp": "2026-06-12T14:29:00Z",
+      "p50_latency_ms": 65,
+      "p95_latency_ms": 110,
+      "p99_latency_ms": 122,
+      "error_rate_pct": 0.1,
+      "cpu_pct": 40,
+      "memory_pct": 66,
+      "connection_pool_usage_pct": 40,
+      "baseline_p99_ms": 120
+    },
+    {
+      "timestamp": "2026-06-12T14:30:00Z",
+      "p50_latency_ms": 68,
+      "p95_latency_ms": 115,
+      "p99_latency_ms": 125,
+      "error_rate_pct": 0.12,
+      "cpu_pct": 41,
+      "memory_pct": 67,
+      "connection_pool_usage_pct": 42,
+      "baseline_p99_ms": 120
+    },
+    {
+      "timestamp": "2026-06-12T14:31:00Z",
+      "p50_latency_ms": 450,
+      "p95_latency_ms": 1200,
+      "p99_latency_ms": 2450,
+      "error_rate_pct": 3.2,
+      "cpu_pct": 45,
+      "memory_pct": 72,
+      "connection_pool_usage_pct": 98,
+      "baseline_p99_ms": 120
+    },
+    {
+      "timestamp": "2026-06-12T14:32:00Z",
+      "p50_latency_ms": 520,
+      "p95_latency_ms": 1350,
+      "p99_latency_ms": 2680,
+      "error_rate_pct": 4.1,
+      "cpu_pct": 46,
+      "memory_pct": 73,
+      "connection_pool_usage_pct": 99,
+      "baseline_p99_ms": 120
+    },
+    {
+      "timestamp": "2026-06-12T14:33:00Z",
+      "p50_latency_ms": 510,
+      "p95_latency_ms": 1310,
+      "p99_latency_ms": 2590,
+      "error_rate_pct": 3.8,
+      "cpu_pct": 45,
+      "memory_pct": 72,
+      "connection_pool_usage_pct": 97,
+      "baseline_p99_ms": 120
+    },
+    {
+      "timestamp": "2026-06-12T14:34:00Z",
+      "p50_latency_ms": 480,
+      "p95_latency_ms": 1100,
+      "p99_latency_ms": 2200,
+      "error_rate_pct": 2.9,
+      "cpu_pct": 44,
+      "memory_pct": 71,
+      "connection_pool_usage_pct": 95,
+      "baseline_p99_ms": 120
+    },
+    {
+      "timestamp": "2026-06-12T14:35:00Z",
+      "p50_latency_ms": 85,
+      "p95_latency_ms": 140,
+      "p99_latency_ms": 165,
+      "error_rate_pct": 0.15,
+      "cpu_pct": 41,
+      "memory_pct": 67,
+      "connection_pool_usage_pct": 45,
+      "baseline_p99_ms": 120
+    }
+  ]
+}

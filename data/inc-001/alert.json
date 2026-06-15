@@ -2,5 +2,8 @@
   "id": "alert-001",
   "title": "API Gateway Latency Spike",
   "description": "P99 latency spiked to 2450ms on api-gateway service",
-  "severity": 3
+  "severity": 3,
+  "service": "api-gateway",
+  "incident_id": "inc-001",
+  "time_window": "14:30-14:35"
 }

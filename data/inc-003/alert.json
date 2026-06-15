@@ -1,0 +1,9 @@
+{
+  "id": "alert-003",
+  "title": "Payment Service Full Outage",
+  "description": "100% error rate on payment-service, NullPointerException and OutOfMemoryError in logs",
+  "severity": 4,
+  "service": "payment-service",
+  "incident_id": "inc-003",
+  "time_window": "08:45-09:10"
+}

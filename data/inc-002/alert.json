@@ -1,0 +1,9 @@
+{
+  "id": "alert-002",
+  "title": "User Service Elevated Latency",
+  "description": "P99 latency elevated to 380ms on user-service, slow queries detected",
+  "severity": 2,
+  "service": "user-service",
+  "incident_id": "inc-002",
+  "time_window": "10:20-10:30"
+}

@@ -21,6 +21,9 @@ class IncidentAlert(BaseModel):
     title: str
     description: str
     severity: Severity
+    service: str = "unknown-service"
+    time_window: str = ""
+    incident_id: str = ""
 
 class TriageTask(BaseModel):
     task_id: str

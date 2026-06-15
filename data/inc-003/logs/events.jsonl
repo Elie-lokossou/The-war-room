@@ -1,0 +1,13 @@
+{"timestamp": "2026-06-14T08:44:30Z", "level": "INFO", "service": "payment-service", "message": "Payment processed in 178ms", "trace_id": "pay001", "status_code": 200}
+{"timestamp": "2026-06-14T08:45:52Z", "level": "INFO", "service": "payment-service", "message": "Payment processed in 182ms", "trace_id": "pay002", "status_code": 200}
+{"timestamp": "2026-06-14T08:46:01Z", "level": "FATAL", "service": "payment-service", "message": "NullPointerException in PaymentProcessor.charge() — vault_client is null", "trace_id": "err001", "exception": "NullPointerException", "status_code": 500}
+{"timestamp": "2026-06-14T08:46:03Z", "level": "FATAL", "service": "payment-service", "message": "NullPointerException in PaymentProcessor.charge() — vault_client is null", "trace_id": "err002", "exception": "NullPointerException", "status_code": 500}
+{"timestamp": "2026-06-14T08:46:05Z", "level": "FATAL", "service": "payment-service", "message": "NullPointerException in PaymentProcessor.charge() — vault_client is null", "trace_id": "err003", "exception": "NullPointerException", "status_code": 500}
+{"timestamp": "2026-06-14T08:46:08Z", "level": "ERROR", "service": "payment-service", "message": "Service unavailable: vault-service returned 503", "trace_id": "err004", "status_code": 503}
+{"timestamp": "2026-06-14T08:46:10Z", "level": "FATAL", "service": "payment-service", "message": "OutOfMemoryError: Java heap space", "trace_id": "err005", "exception": "OutOfMemoryError", "status_code": 500}
+{"timestamp": "2026-06-14T08:46:12Z", "level": "FATAL", "service": "payment-service", "message": "Process crash — pod restarting", "trace_id": "sys001", "exception": "ProcessCrash"}
+{"timestamp": "2026-06-14T08:46:15Z", "level": "ERROR", "service": "payment-service", "message": "Health check failed — pod not ready", "trace_id": "sys002", "status_code": 503}
+{"timestamp": "2026-06-14T08:46:20Z", "level": "ERROR", "service": "payment-service", "message": "Health check failed — pod not ready", "trace_id": "sys003", "status_code": 503}
+{"timestamp": "2026-06-14T08:46:25Z", "level": "FATAL", "service": "payment-service", "message": "NullPointerException in PaymentProcessor.charge() — vault_client is null", "trace_id": "err006", "exception": "NullPointerException", "status_code": 500}
+{"timestamp": "2026-06-14T08:46:30Z", "level": "FATAL", "service": "payment-service", "message": "OutOfMemoryError: Java heap space", "trace_id": "err007", "exception": "OutOfMemoryError", "status_code": 500}
+{"timestamp": "2026-06-14T09:05:00Z", "level": "INFO", "service": "payment-service", "message": "Payment processed in 205ms (after failover)", "trace_id": "pay101", "status_code": 200}

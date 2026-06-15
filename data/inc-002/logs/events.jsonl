@@ -1,0 +1,10 @@
+{"timestamp": "2026-06-13T10:18:30Z", "level": "INFO", "service": "user-service", "message": "Request processed in 112ms", "trace_id": "aaa101", "status_code": 200}
+{"timestamp": "2026-06-13T10:21:05Z", "level": "WARN", "service": "user-service", "message": "Slow query detected: SELECT * FROM users WHERE ... took 280ms (threshold: 100ms)", "trace_id": "bbb101"}
+{"timestamp": "2026-06-13T10:21:18Z", "level": "WARN", "service": "user-service", "message": "Slow query detected: SELECT * FROM users WHERE ... took 310ms (threshold: 100ms)", "trace_id": "bbb102"}
+{"timestamp": "2026-06-13T10:21:45Z", "level": "WARN", "service": "user-service", "message": "Slow query detected: SELECT * FROM orders WHERE user_id=... took 295ms", "trace_id": "bbb103"}
+{"timestamp": "2026-06-13T10:22:10Z", "level": "INFO", "service": "user-service", "message": "Request processed in 335ms", "trace_id": "ccc101", "status_code": 200}
+{"timestamp": "2026-06-13T10:23:00Z", "level": "WARN", "service": "user-service", "message": "Slow query detected: SELECT * FROM users WHERE ... took 350ms", "trace_id": "bbb104"}
+{"timestamp": "2026-06-13T10:24:30Z", "level": "INFO", "service": "user-service", "message": "Request processed in 290ms", "trace_id": "ccc102", "status_code": 200}
+{"timestamp": "2026-06-13T10:26:00Z", "level": "WARN", "service": "user-service", "message": "Slow query detected: SELECT * FROM users WHERE ... took 210ms", "trace_id": "bbb105"}
+{"timestamp": "2026-06-13T10:27:30Z", "level": "INFO", "service": "user-service", "message": "Request processed in 145ms", "trace_id": "ccc103", "status_code": 200}
+{"timestamp": "2026-06-13T10:28:10Z", "level": "INFO", "service": "user-service", "message": "Request processed in 120ms", "trace_id": "ccc104", "status_code": 200}

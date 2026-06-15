@@ -1,0 +1,37 @@
+{
+  "incident_id": "inc-003",
+  "service": "payment-service",
+  "incident_start": "2026-06-14T08:46:00Z",
+  "deploys": [
+    {
+      "deploy_id": "301",
+      "timestamp": "2026-06-13T16:00:00Z",
+      "description": "Upgrade payment SDK to v4.0",
+      "author": "deploy-bot",
+      "diff": {"payment_sdk.version": {"before": "3.8.2", "after": "4.0.0"}},
+      "rollback_deploy_id": null
+    },
+    {
+      "deploy_id": "302",
+      "timestamp": "2026-06-14T08:45:00Z",
+      "description": "Update vault-service endpoint configuration",
+      "author": "deploy-bot",
+      "diff": {
+        "vault.endpoint": {"before": "https://vault.internal:8200", "after": "https://vault-v2.internal:8200"},
+        "vault.client_init": {"before": "eager", "after": "lazy"}
+      },
+      "rollback_deploy_id": "303"
+    },
+    {
+      "deploy_id": "303",
+      "timestamp": "2026-06-14T09:02:00Z",
+      "description": "ROLLBACK: Revert deploy #302 — NullPointerException in vault_client",
+      "author": "on-call-engineer",
+      "diff": {
+        "vault.endpoint": {"before": "https://vault-v2.internal:8200", "after": "https://vault.internal:8200"},
+        "vault.client_init": {"before": "lazy", "after": "eager"}
+      },
+      "rollback_deploy_id": null
+    }
+  ]
+}

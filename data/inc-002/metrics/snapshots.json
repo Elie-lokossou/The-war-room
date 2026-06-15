@@ -1,0 +1,63 @@
+{
+  "incident_id": "inc-002",
+  "service": "user-service",
+  "baseline_window": "10:00-10:20",
+  "incident_window": "10:21-10:28",
+  "snapshots": [
+    {
+      "timestamp": "2026-06-13T10:18:00Z",
+      "p50_latency_ms": 45,
+      "p95_latency_ms": 88,
+      "p99_latency_ms": 115,
+      "error_rate_pct": 0.05,
+      "cpu_pct": 30,
+      "memory_pct": 55,
+      "connection_pool_usage_pct": 30,
+      "baseline_p99_ms": 120
+    },
+    {
+      "timestamp": "2026-06-13T10:21:00Z",
+      "p50_latency_ms": 185,
+      "p95_latency_ms": 290,
+      "p99_latency_ms": 340,
+      "error_rate_pct": 0.4,
+      "cpu_pct": 62,
+      "memory_pct": 58,
+      "connection_pool_usage_pct": 55,
+      "baseline_p99_ms": 120
+    },
+    {
+      "timestamp": "2026-06-13T10:23:00Z",
+      "p50_latency_ms": 210,
+      "p95_latency_ms": 320,
+      "p99_latency_ms": 380,
+      "error_rate_pct": 0.5,
+      "cpu_pct": 68,
+      "memory_pct": 60,
+      "connection_pool_usage_pct": 58,
+      "baseline_p99_ms": 120
+    },
+    {
+      "timestamp": "2026-06-13T10:25:00Z",
+      "p50_latency_ms": 160,
+      "p95_latency_ms": 250,
+      "p99_latency_ms": 310,
+      "error_rate_pct": 0.3,
+      "cpu_pct": 55,
+      "memory_pct": 57,
+      "connection_pool_usage_pct": 48,
+      "baseline_p99_ms": 120
+    },
+    {
+      "timestamp": "2026-06-13T10:28:00Z",
+      "p50_latency_ms": 52,
+      "p95_latency_ms": 95,
+      "p99_latency_ms": 128,
+      "error_rate_pct": 0.07,
+      "cpu_pct": 32,
+      "memory_pct": 55,
+      "connection_pool_usage_pct": 32,
+      "baseline_p99_ms": 120
+    }
+  ]
+}

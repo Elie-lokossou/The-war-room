@@ -1,0 +1,23 @@
+{
+  "incident_id": "inc-002",
+  "service": "user-service",
+  "incident_start": "2026-06-13T10:21:00Z",
+  "deploys": [
+    {
+      "deploy_id": "201",
+      "timestamp": "2026-06-11T14:00:00Z",
+      "description": "Add user preference caching",
+      "author": "bob",
+      "diff": {"cache.ttl": {"before": 300, "after": 600}},
+      "rollback_deploy_id": null
+    },
+    {
+      "deploy_id": "202",
+      "timestamp": "2026-06-12T09:30:00Z",
+      "description": "Update logging verbosity",
+      "author": "carol",
+      "diff": {"log.level": {"before": "INFO", "after": "DEBUG"}},
+      "rollback_deploy_id": null
+    }
+  ]
+}
