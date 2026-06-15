@@ -1,0 +1,151 @@
+/* ============================================================
+   SLATE Design System — tokens.css
+   All design decisions live here as CSS custom properties.
+   Load Archivo Black (display) and Inter (UI/body) +
+   JetBrains Mono (code, rare) from Google Fonts:
+
+   <link rel="preconnect" href="https://fonts.googleapis.com">
+   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+   <link href="https://fonts.googleapis.com/css2?family=Archivo+Black&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+   ============================================================ */
+
+:root {
+  /* ---------- Surfaces — warm charcoal, five steps ---------- */
+  --sl-bg:         #3D3D3D;   /* page canvas — warm charcoal, never pure black */
+  --sl-bg-alt:     #454545;   /* subtle lift, nested zone */
+  --sl-surface:    #525252;   /* default card / thumb */
+  --sl-surface-2:  #5E5E5E;   /* elevated card, hover */
+  --sl-bg-dark:    #2A2A2A;   /* deep zone, footer */
+
+  /* ---------- Foreground — warm off-white ---------- */
+  --sl-fg:        #EDEDE8;    /* primary text, display */
+  --sl-fg-soft:   #C4C4BE;    /* secondary body */
+  --sl-fg-muted:  #8C8C87;    /* captions, meta, disabled */
+  --sl-fg-faint:  #646461;    /* placeholders */
+
+  /* ---------- Lines — semi-transparent white over charcoal ---------- */
+  --sl-line:        rgba(237, 237, 232, 0.08);   /* default subtle border */
+  --sl-line-strong: rgba(237, 237, 232, 0.16);   /* emphasized */
+  --sl-line-hard:   rgba(237, 237, 232, 0.32);   /* button outline */
+
+  /* ---------- Accent — monochrome by default (white on charcoal) ---------- */
+  /* The system is intentionally monochromatic. If the host brand
+     needs a chromatic accent, override --sl-accent at :root level. */
+  --sl-accent:        #EDEDE8;
+  --sl-accent-soft:   rgba(237, 237, 232, 0.6);
+  --sl-accent-tint:   rgba(237, 237, 232, 0.08);
+  --sl-accent-glow:   rgba(237, 237, 232, 0.20);
+  --sl-accent-ink:    #2A2A2A;   /* text on bright fill */
+
+  /* ---------- Support — rare ---------- */
+  --sl-danger:   #E85545;
+  --sl-success:  #7DC877;
+  --sl-warning:  #E8A855;
+
+  /* ---------- Typography ---------- */
+  --sl-ff-display: "Archivo Black", "Anton", "Impact", sans-serif;
+  --sl-ff-sans:    "Inter", "Helvetica Neue", Arial, sans-serif;
+  --sl-ff-mono:    "JetBrains Mono", "SFMono-Regular", Consolas, monospace;
+
+  /* Type scale — display sizes are huge by design */
+  --sl-fs-display-1: clamp(80px, 14vw, 240px);
+  --sl-fs-display-2: clamp(64px, 10vw, 180px);
+  --sl-fs-display-3: clamp(44px, 7vw, 120px);
+  --sl-fs-h1: 48px;
+  --sl-fs-h2: 36px;
+  --sl-fs-h3: 24px;
+  --sl-fs-h4: 18px;
+  --sl-fs-body-lg: 17px;
+  --sl-fs-body: 15px;
+  --sl-fs-small: 13px;
+  --sl-fs-micro: 11px;
+
+  --sl-lh-display: 0.88;      /* Archivo Black is heavy — tight line-height */
+  --sl-lh-tight:   1.1;
+  --sl-lh-snug:    1.4;
+  --sl-lh-body:    1.6;
+
+  --sl-tracking-display: -0.03em;   /* tight on massive caps */
+  --sl-tracking-label:    0.08em;   /* UPPERCASE labels */
+  --sl-tracking-mono:     0.02em;
+
+  --sl-fw-regular:  400;
+  --sl-fw-medium:   500;
+  --sl-fw-semibold: 600;
+  --sl-fw-bold:     700;
+
+  /* ---------- Spacing (4px base) ---------- */
+  --sl-sp-1:  4px;
+  --sl-sp-2:  8px;
+  --sl-sp-3:  12px;
+  --sl-sp-4:  16px;
+  --sl-sp-5:  24px;
+  --sl-sp-6:  32px;
+  --sl-sp-7:  48px;
+  --sl-sp-8:  64px;
+  --sl-sp-9:  96px;
+  --sl-sp-10: 128px;
+
+  /* ---------- Geometry — pills and circles ---------- */
+  --sl-r-xs:   4px;
+  --sl-r-sm:   8px;
+  --sl-r-md:   14px;
+  --sl-r-lg:   20px;
+  --sl-r-xl:   28px;
+  --sl-r-pill: 999px;      /* default on buttons, nav chips, product thumbs */
+
+  --sl-bw-hair:  1px;
+  --sl-bw-thick: 1.5px;
+
+  /* ---------- Shadows — soft, grounded ---------- */
+  --sl-shadow-xs: 0 2px 6px  rgba(0, 0, 0, 0.12);
+  --sl-shadow-sm: 0 4px 16px rgba(0, 0, 0, 0.16);
+  --sl-shadow:    0 8px 32px rgba(0, 0, 0, 0.24);
+  --sl-shadow-lg: 0 20px 60px rgba(0, 0, 0, 0.32);
+
+  /* Soft inner gradient for circular product thumbs */
+  --sl-thumb-gradient: radial-gradient(circle at 50% 40%,
+    rgba(237, 237, 232, 0.08) 0%,
+    rgba(237, 237, 232, 0.02) 60%,
+    transparent 100%);
+
+  /* ---------- Motion — restrained, confident ---------- */
+  --sl-ease:     cubic-bezier(0.2, 0.7, 0.2, 1);
+  --sl-dur-fast: 180ms;
+  --sl-dur-med:  280ms;
+}
+
+/* ============================================================
+   Base — applied via .sl-body on <body>
+   ============================================================ */
+*, *::before, *::after { box-sizing: border-box; }
+
+.sl-body {
+  margin: 0;
+  background: var(--sl-bg);
+  color: var(--sl-fg);
+  font-family: var(--sl-ff-sans);
+  font-size: var(--sl-fs-body);
+  font-weight: var(--sl-fw-regular);
+  line-height: var(--sl-lh-body);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  text-rendering: optimizeLegibility;
+  position: relative;
+}
+
+/* Signature grain — apply via .sl-grain on body or a wrapper.
+   Uses an inline SVG turbulence filter so no external asset is needed. */
+.sl-grain::before {
+  content: "";
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  z-index: 9999;
+  background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='200' height='200'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='2' stitchTiles='stitch'/><feColorMatrix values='0 0 0 0 1 0 0 0 0 1 0 0 0 0 1 0 0 0 0.45 0'/></filter><rect width='100%25' height='100%25' filter='url(%23n)' opacity='0.55'/></svg>");
+  background-size: 200px 200px;
+  opacity: 0.06;
+  mix-blend-mode: overlay;
+}
+
+::selection { background: var(--sl-fg); color: var(--sl-accent-ink); }

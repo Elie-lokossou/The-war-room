@@ -1,0 +1,350 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>WAR ROOM | Studio Dashboard</title>
+    
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+    
+    <style>
+        :root {
+            --bg: #F9FAFB;
+            --surface: #FFFFFF;
+            --fg: #111827;
+            --fg-muted: #6B7280;
+            --accent: #2563EB; /* Professional Blue */
+            --accent-soft: #EFF6FF;
+            --border: #E5E7EB;
+            --shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.1), 0 1px 2px 0 rgba(0, 0, 0, 0.06);
+            --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+            --radius: 12px;
+            --font-sans: 'Inter', -apple-system, sans-serif;
+            --font-mono: 'JetBrains Mono', monospace;
+        }
+
+        * { box-sizing: border-box; }
+
+        body {
+            margin: 0;
+            background-color: var(--bg);
+            color: var(--fg);
+            font-family: var(--font-sans);
+            -webkit-font-smoothing: antialiased;
+            display: flex;
+            height: 100vh;
+            overflow: hidden;
+        }
+
+        /* --- Sidebar --- */
+        .sidebar {
+            width: 300px;
+            background: var(--surface);
+            border-right: 1px solid var(--border);
+            display: flex;
+            flex-direction: column;
+            padding: 32px 24px;
+        }
+
+        .logo {
+            font-weight: 700;
+            font-size: 18px;
+            letter-spacing: -0.02em;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-bottom: 48px;
+        }
+
+        .logo-icon {
+            width: 24px;
+            height: 24px;
+            background: var(--accent);
+            border-radius: 6px;
+        }
+
+        .nav-group { margin-bottom: 32px; }
+        .nav-label {
+            font-size: 12px;
+            font-weight: 600;
+            color: var(--fg-muted);
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            margin-bottom: 16px;
+        }
+
+        .alert-item {
+            padding: 12px 16px;
+            border-radius: var(--radius);
+            margin-bottom: 8px;
+            cursor: pointer;
+            transition: all 0.2s;
+            border: 1px solid transparent;
+        }
+
+        .alert-item.active {
+            background: var(--accent-soft);
+            color: var(--accent);
+            border-color: rgba(37, 99, 235, 0.1);
+        }
+
+        .alert-item:not(.active):hover {
+            background: #F3F4F6;
+        }
+
+        .alert-title { font-size: 14px; font-weight: 600; }
+        .alert-meta { font-size: 12px; color: var(--fg-muted); margin-top: 4px; }
+
+        /* --- Main Content --- */
+        .main {
+            flex: 1;
+            padding: 64px 80px;
+            overflow-y: auto;
+        }
+
+        .header {
+            max-width: 900px;
+            margin-bottom: 48px;
+        }
+
+        .status-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            padding: 4px 12px;
+            background: #FEF3C7;
+            color: #92400E;
+            font-size: 12px;
+            font-weight: 600;
+            border-radius: 99px;
+            margin-bottom: 16px;
+        }
+
+        .status-dot { width: 6px; height: 6px; background: currentColor; border-radius: 50%; }
+
+        h1 {
+            font-size: 36px;
+            font-weight: 800;
+            letter-spacing: -0.03em;
+            margin: 0 0 16px 0;
+            color: #111827;
+        }
+
+        .description {
+            font-size: 16px;
+            color: var(--fg-muted);
+            line-height: 1.5;
+            max-width: 600px;
+        }
+
+        /* --- Verdict Card --- */
+        .verdict-card {
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: 20px;
+            padding: 40px;
+            box-shadow: var(--shadow-lg);
+            margin-bottom: 48px;
+            max-width: 900px;
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 40px;
+        }
+
+        .verdict-main h2 { font-size: 14px; color: var(--fg-muted); text-transform: uppercase; letter-spacing: 0.1em; margin-bottom: 16px; }
+        .verdict-content { font-size: 20px; font-weight: 600; line-height: 1.4; color: var(--fg); }
+
+        .action-list { list-style: none; padding: 0; margin: 0; }
+        .action-item {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 12px 16px;
+            background: #F9FAFB;
+            border: 1px solid var(--border);
+            border-radius: 10px;
+            margin-bottom: 8px;
+            font-size: 14px;
+            font-weight: 500;
+        }
+
+        /* --- Agent Grid --- */
+        .agent-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            gap: 24px;
+            max-width: 900px;
+        }
+
+        .agent-card {
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: var(--radius);
+            padding: 24px;
+            transition: transform 0.2s, box-shadow 0.2s;
+        }
+
+        .agent-card:hover { transform: translateY(-2px); box-shadow: var(--shadow); }
+
+        .agent-header {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 20px;
+        }
+
+        .agent-name { font-size: 12px; font-weight: 600; color: var(--fg-muted); text-transform: uppercase; }
+        .agent-status { font-size: 12px; font-weight: 600; color: var(--accent); }
+
+        .agent-summary { font-size: 16px; font-weight: 600; margin-bottom: 8px; }
+        .agent-detail { font-size: 14px; color: var(--fg-muted); line-height: 1.5; margin-bottom: 20px; }
+
+        .progress-bar { height: 6px; background: #F3F4F6; border-radius: 3px; overflow: hidden; }
+        .progress-fill { height: 100%; background: var(--accent); width: 0%; transition: width 1s ease-out; }
+
+        /* --- Animations --- */
+        .hidden { display: none !important; }
+        .fade-in { animation: fadeIn 0.6s ease forwards; }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+
+        button.btn-primary {
+            background: var(--fg);
+            color: white;
+            border: none;
+            padding: 12px 24px;
+            border-radius: 8px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: background 0.2s;
+            margin-top: auto;
+        }
+
+        button.btn-primary:hover { background: #000; }
+    </style>
+</head>
+<body>
+
+    <!-- SIDEBAR -->
+    <aside class="sidebar">
+        <div class="logo">
+            <div class="logo-icon"></div>
+            War Room Studio
+        </div>
+
+        <div class="nav-group">
+            <div class="nav-label">Live Incidents</div>
+            <div id="alert-list">
+                <div class="alert-item active">
+                    <div class="alert-title">API Latency Spike</div>
+                    <div class="alert-meta">Active now • US-East-1</div>
+                </div>
+                <div class="alert-item">
+                    <div class="alert-title">DB Pool Warning</div>
+                    <div class="alert-meta">12m ago • us-east-1b</div>
+                </div>
+            </div>
+        </div>
+
+        <button id="run-sim" class="btn-primary">Execute Triage</button>
+    </aside>
+
+    <!-- MAIN -->
+    <main class="main">
+        <div id="welcome" style="text-align: center; margin-top: 100px;">
+            <h1 style="color: #E5E7EB; font-size: 48px;">Systems Ready</h1>
+            <p style="color: #9CA3AF;">Select an incident and run triage to begin analysis.</p>
+        </div>
+
+        <div id="incident-room" class="hidden">
+            <div class="header fade-in">
+                <div class="status-badge" id="status-badge">
+                    <div class="status-dot"></div>
+                    <span>Triage in Progress</span>
+                </div>
+                <h1>API Gateway Latency Spike</h1>
+                <p class="description">Latency detected across all production clusters. Ingesting Band SDK findings in real-time.</p>
+            </div>
+
+            <div id="verdict-section" class="verdict-card hidden">
+                <div class="verdict-main">
+                    <h2>Resolution Strategy</h2>
+                    <div class="verdict-content" id="verdict-msg">Synthesizing reports...</div>
+                </div>
+                <div>
+                    <h2>Recommended Actions</h2>
+                    <div id="action-list"></div>
+                </div>
+            </div>
+
+            <div class="agent-grid" id="agent-grid">
+                <!-- Agents -->
+            </div>
+        </div>
+    </main>
+
+    <script>
+        const agents = [
+            { name: 'Metrics', summary: 'Anomaly Detected', detail: 'P99 latency at 2450ms. CPU usage normal across nodes.', conf: 92 },
+            { name: 'Logs', summary: 'No Errors Found', detail: 'Analyzed 15k log lines. No 5xx or stack traces detected.', conf: 88 },
+            { name: 'Change', summary: 'No Recent Deploys', detail: 'Last release was 48h ago. No config changes detected.', conf: 75 },
+            { name: 'Runbook', summary: 'Playbook Matched', detail: 'Correlation with "High Latency - Resource Scaling" guide.', conf: 81 }
+        ];
+
+        function runSim() {
+            document.getElementById('welcome').classList.add('hidden');
+            document.getElementById('incident-room').classList.remove('hidden');
+            document.getElementById('agent-grid').innerHTML = '';
+            document.getElementById('verdict-section').classList.add('hidden');
+            document.getElementById('status-badge').style.background = '#FEF3C7';
+            document.getElementById('status-badge').style.color = '#92400E';
+            document.getElementById('status-badge').querySelector('span').innerText = 'Triage in Progress';
+
+            agents.forEach((a, i) => {
+                setTimeout(() => {
+                    const card = document.createElement('div');
+                    card.className = 'agent-card fade-in';
+                    card.innerHTML = `
+                        <div class="agent-header">
+                            <span class="agent-name">${a.name} Agent</span>
+                            <span class="agent-status">Analysis Complete</span>
+                        </div>
+                        <div class="agent-summary">${a.summary}</div>
+                        <div class="agent-detail">${a.detail}</div>
+                        <div class="progress-bar"><div class="progress-fill" style="width: 0%"></div></div>
+                    `;
+                    document.getElementById('agent-grid').appendChild(card);
+                    setTimeout(() => {
+                        card.querySelector('.progress-fill').style.width = a.conf + '%';
+                    }, 100);
+
+                    if (i === agents.length - 1) setTimeout(showVerdict, 1000);
+                }, i * 1000);
+            });
+        }
+
+        function showVerdict() {
+            const v = document.getElementById('verdict-section');
+            v.classList.remove('hidden');
+            v.classList.add('fade-in');
+            document.getElementById('verdict-msg').innerText = "Infrastructure scaling required. No code-level regressions detected.";
+            
+            document.getElementById('status-badge').style.background = '#D1FAE5';
+            document.getElementById('status-badge').style.color = '#065F46';
+            document.getElementById('status-badge').querySelector('span').innerText = 'Resolution Formulated';
+
+            const actions = ["Scale up API-Tier x4", "Inspect DB connection pool", "Notify SRE On-call"];
+            const list = document.getElementById('action-list');
+            list.innerHTML = '';
+            actions.forEach(act => {
+                const item = document.createElement('div');
+                item.className = 'action-item';
+                item.innerHTML = `<span>→</span> ${act}`;
+                list.appendChild(item);
+            });
+        }
+
+        document.getElementById('run-sim').addEventListener('click', runSim);
+    </script>
+</body>
+</html>

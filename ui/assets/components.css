@@ -1,0 +1,479 @@
+/* ============================================================
+   SLATE Design System — components.css
+   All reusable component classes. Depends on tokens.css.
+   Prefix is .sl-* (except .btn).
+   ============================================================ */
+
+/* ============================================================
+   Typography utilities
+   ============================================================ */
+.sl-display {
+  font-family: var(--sl-ff-display);
+  font-weight: var(--sl-fw-regular);   /* Archivo Black ships as single weight */
+  text-transform: uppercase;
+  letter-spacing: var(--sl-tracking-display);
+  line-height: var(--sl-lh-display);
+  color: var(--sl-fg);
+}
+.sl-display--outline {
+  -webkit-text-stroke: 2px var(--sl-fg);
+  -webkit-text-fill-color: transparent;
+  color: transparent;
+}
+
+.sl-mono {
+  font-family: var(--sl-ff-mono);
+  font-size: var(--sl-fs-small);
+  letter-spacing: var(--sl-tracking-mono);
+}
+
+.sl-label {
+  font-family: var(--sl-ff-sans);
+  font-size: var(--sl-fs-micro);
+  font-weight: var(--sl-fw-semibold);
+  letter-spacing: var(--sl-tracking-label);
+  text-transform: uppercase;
+  color: var(--sl-fg-muted);
+}
+
+.sl-muted       { color: var(--sl-fg-muted); }
+.sl-soft        { color: var(--sl-fg-soft); }
+
+/* ============================================================
+   Logo — circle mark + wordmark
+   ============================================================ */
+.sl-logo {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  font-family: var(--sl-ff-display);
+  font-size: 22px;
+  letter-spacing: 0.02em;
+  color: var(--sl-fg);
+  text-decoration: none;
+  text-transform: uppercase;
+  line-height: 1;
+}
+.sl-logo .mark {
+  width: 26px;
+  height: 26px;
+  border: 1.5px solid var(--sl-fg);
+  border-radius: 50%;
+  display: grid;
+  place-items: center;
+  flex-shrink: 0;
+}
+.sl-logo .mark::before {
+  content: "";
+  width: 10px; height: 10px;
+  border-radius: 50%;
+  background: var(--sl-fg);
+}
+.sl-logo--lg { font-size: 32px; }
+.sl-logo--lg .mark { width: 36px; height: 36px; }
+.sl-logo--lg .mark::before { width: 14px; height: 14px; }
+
+/* ============================================================
+   Buttons — pill-rounded, minimal
+   ============================================================ */
+.btn {
+  --btn-bg: var(--sl-fg);
+  --btn-fg: var(--sl-accent-ink);
+  --btn-border: var(--sl-fg);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  font-family: var(--sl-ff-sans);
+  font-size: var(--sl-fs-small);
+  font-weight: var(--sl-fw-semibold);
+  padding: 12px 24px;
+  background: var(--btn-bg);
+  color: var(--btn-fg);
+  border: var(--sl-bw-hair) solid var(--btn-border);
+  border-radius: var(--sl-r-pill);
+  cursor: pointer;
+  text-decoration: none;
+  transition: background var(--sl-dur-fast) var(--sl-ease),
+              color var(--sl-dur-fast) var(--sl-ease),
+              border-color var(--sl-dur-fast) var(--sl-ease),
+              transform var(--sl-dur-fast) var(--sl-ease);
+}
+.btn:hover {
+  background: var(--sl-fg-soft);
+  border-color: var(--sl-fg-soft);
+  transform: translateY(-1px);
+}
+.btn:active { transform: translateY(0); opacity: 0.85; }
+
+/* Ghost — outlined, transparent */
+.btn--ghost {
+  --btn-bg: transparent;
+  --btn-fg: var(--sl-fg);
+  --btn-border: var(--sl-line-hard);
+}
+.btn--ghost:hover {
+  --btn-bg: var(--sl-bg-alt);
+  --btn-border: var(--sl-fg);
+  color: var(--sl-fg);
+}
+
+/* Dark — on bright surfaces */
+.btn--dark {
+  --btn-bg: var(--sl-bg-dark);
+  --btn-fg: var(--sl-fg);
+  --btn-border: var(--sl-bg-dark);
+}
+.btn--dark:hover { --btn-bg: var(--sl-bg); --btn-border: var(--sl-bg); }
+
+.btn--sm { font-size: var(--sl-fs-micro); padding: 8px 16px; }
+.btn--lg { font-size: var(--sl-fs-body); padding: 16px 32px; }
+
+/* Round icon button — for search, cart, arrows */
+.btn--round {
+  width: 44px;
+  height: 44px;
+  padding: 0;
+  border-radius: 50%;
+}
+.btn--round.btn--sm { width: 32px; height: 32px; }
+.btn--round.btn--lg { width: 56px; height: 56px; }
+
+.btn .arrow { display: inline-block; transition: transform var(--sl-dur-fast) var(--sl-ease); }
+.btn:hover .arrow { transform: translateX(3px); }
+
+/* ============================================================
+   Link — subtle underlined
+   ============================================================ */
+.sl-link {
+  color: var(--sl-fg);
+  text-decoration: underline;
+  text-decoration-thickness: 1px;
+  text-underline-offset: 4px;
+  text-decoration-color: var(--sl-line-strong);
+  transition: color var(--sl-dur-fast) var(--sl-ease),
+              text-decoration-color var(--sl-dur-fast) var(--sl-ease);
+}
+.sl-link:hover { color: var(--sl-fg); text-decoration-color: var(--sl-fg); }
+.sl-link--muted { color: var(--sl-fg-muted); }
+.sl-link--muted:hover { color: var(--sl-fg); }
+
+/* ============================================================
+   Card — rounded, subtle border
+   ============================================================ */
+.sl-card {
+  background: var(--sl-bg-alt);
+  border: var(--sl-bw-hair) solid var(--sl-line);
+  border-radius: var(--sl-r-lg);
+  padding: var(--sl-sp-6);
+}
+.sl-card--elevated { background: var(--sl-surface); box-shadow: var(--sl-shadow-sm); }
+.sl-card--flat     { background: transparent; border-color: transparent; padding: 0; }
+.sl-card--dark     { background: var(--sl-bg-dark); }
+
+/* ============================================================
+   Product thumb — the signature circular/oval capsule
+   ============================================================ */
+.sl-thumb {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--sl-sp-3);
+  text-decoration: none;
+  color: inherit;
+  cursor: pointer;
+}
+.sl-thumb .capsule {
+  width: 160px;
+  height: 180px;
+  border-radius: var(--sl-r-pill);     /* oval via full rounding + aspect */
+  background: var(--sl-bg-alt) var(--sl-thumb-gradient);
+  border: var(--sl-bw-hair) solid var(--sl-line);
+  display: grid;
+  place-items: center;
+  overflow: hidden;
+  position: relative;
+  transition: transform var(--sl-dur-med) var(--sl-ease),
+              border-color var(--sl-dur-fast) var(--sl-ease);
+}
+.sl-thumb:hover .capsule {
+  transform: translateY(-4px);
+  border-color: var(--sl-line-strong);
+}
+.sl-thumb .capsule img { max-width: 70%; height: auto; object-fit: contain; }
+.sl-thumb .title {
+  font-family: var(--sl-ff-sans);
+  font-size: var(--sl-fs-micro);
+  font-weight: var(--sl-fw-semibold);
+  letter-spacing: var(--sl-tracking-label);
+  text-transform: uppercase;
+  color: var(--sl-fg);
+  text-align: center;
+  max-width: 160px;
+  line-height: 1.3;
+}
+.sl-thumb .spark {
+  color: var(--sl-fg);
+  font-size: 10px;
+  opacity: 0.6;
+  margin-top: -4px;
+}
+.sl-thumb--sm .capsule { width: 112px; height: 132px; }
+.sl-thumb--lg .capsule { width: 220px; height: 260px; }
+
+/* ============================================================
+   Feature card — icon + heading + body
+   ============================================================ */
+.sl-feature {
+  background: var(--sl-bg-alt);
+  border: var(--sl-bw-hair) solid var(--sl-line);
+  border-radius: var(--sl-r-lg);
+  padding: var(--sl-sp-6);
+  display: flex;
+  flex-direction: column;
+  gap: var(--sl-sp-4);
+}
+.sl-feature h4 {
+  margin: 0;
+  font-family: var(--sl-ff-display);
+  font-size: var(--sl-fs-h3);
+  color: var(--sl-fg);
+  text-transform: uppercase;
+  letter-spacing: -0.02em;
+  line-height: 1;
+}
+.sl-feature p {
+  margin: 0;
+  color: var(--sl-fg-soft);
+  font-size: var(--sl-fs-body);
+  line-height: 1.6;
+}
+
+/* ============================================================
+   Icon container — round chip
+   ============================================================ */
+.sl-icon-box {
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
+  background: var(--sl-bg-alt);
+  color: var(--sl-fg);
+  border: var(--sl-bw-hair) solid var(--sl-line);
+  display: grid;
+  place-items: center;
+  flex-shrink: 0;
+  transition: background var(--sl-dur-fast) var(--sl-ease),
+              border-color var(--sl-dur-fast) var(--sl-ease);
+}
+.sl-icon-box:hover { background: var(--sl-surface); border-color: var(--sl-line-strong); }
+.sl-icon-box svg { width: 18px; height: 18px; }
+.sl-icon-box--sm { width: 32px; height: 32px; }
+.sl-icon-box--sm svg { width: 14px; height: 14px; }
+.sl-icon-box--lg { width: 56px; height: 56px; }
+.sl-icon-box--lg svg { width: 24px; height: 24px; }
+.sl-icon-box--solid { background: var(--sl-fg); color: var(--sl-accent-ink); border-color: var(--sl-fg); }
+.sl-icon-box--solid:hover { background: var(--sl-fg-soft); border-color: var(--sl-fg-soft); }
+
+/* ============================================================
+   Review card — avatar + quote, small inline
+   ============================================================ */
+.sl-review {
+  display: flex;
+  flex-direction: column;
+  gap: var(--sl-sp-4);
+  max-width: 340px;
+}
+.sl-review .avatar {
+  width: 56px;
+  height: 56px;
+  border-radius: 50%;
+  overflow: hidden;
+  background: var(--sl-surface);
+  border: var(--sl-bw-hair) solid var(--sl-line);
+}
+.sl-review .avatar img { width: 100%; height: 100%; object-fit: cover; }
+.sl-review .quote {
+  font-size: var(--sl-fs-body);
+  line-height: 1.45;
+  color: var(--sl-fg);
+  margin: 0;
+}
+.sl-review .link {
+  font-size: var(--sl-fs-small);
+  color: var(--sl-fg);
+  text-decoration: underline;
+  text-decoration-thickness: 1px;
+  text-underline-offset: 4px;
+  width: max-content;
+}
+
+/* ============================================================
+   Badge — pill
+   ============================================================ */
+.sl-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-family: var(--sl-ff-sans);
+  font-weight: var(--sl-fw-semibold);
+  font-size: 11px;
+  letter-spacing: var(--sl-tracking-label);
+  text-transform: uppercase;
+  padding: 5px 12px;
+  border-radius: var(--sl-r-pill);
+  background: var(--sl-bg-alt);
+  color: var(--sl-fg);
+  border: var(--sl-bw-hair) solid var(--sl-line);
+}
+.sl-badge--solid { background: var(--sl-fg); color: var(--sl-accent-ink); border-color: var(--sl-fg); }
+.sl-badge--ghost { background: transparent; color: var(--sl-fg-muted); border-color: var(--sl-line-strong); }
+
+/* ============================================================
+   Navigation — logo left, links center, icons right
+   ============================================================ */
+.sl-nav {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: var(--sl-sp-5) var(--sl-sp-7);
+}
+.sl-nav-links {
+  display: flex;
+  gap: var(--sl-sp-6);
+  font-family: var(--sl-ff-sans);
+  font-size: var(--sl-fs-body-lg);
+  font-weight: var(--sl-fw-medium);
+}
+.sl-nav-links a {
+  color: var(--sl-fg);
+  text-decoration: none;
+  transition: opacity var(--sl-dur-fast) var(--sl-ease);
+}
+.sl-nav-links a:hover { opacity: 0.7; }
+.sl-nav-links a.active { text-decoration: underline; text-decoration-thickness: 1.5px; text-underline-offset: 6px; }
+.sl-nav-right { display: flex; align-items: center; gap: var(--sl-sp-3); }
+
+.sl-nav-divider {
+  width: 1px;
+  height: 20px;
+  background: var(--sl-line-strong);
+}
+
+/* ============================================================
+   Form fields
+   ============================================================ */
+.sl-field { display: flex; flex-direction: column; gap: 6px; margin-bottom: var(--sl-sp-4); }
+.sl-field label {
+  font-family: var(--sl-ff-sans);
+  font-size: var(--sl-fs-small);
+  font-weight: var(--sl-fw-semibold);
+  color: var(--sl-fg);
+}
+.sl-field input,
+.sl-field textarea,
+.sl-field select {
+  font-family: var(--sl-ff-sans);
+  font-size: var(--sl-fs-body);
+  padding: 14px 20px;
+  background: var(--sl-bg-alt);
+  color: var(--sl-fg);
+  border: var(--sl-bw-hair) solid var(--sl-line-strong);
+  border-radius: var(--sl-r-pill);
+  outline: none;
+  transition: border-color var(--sl-dur-fast) var(--sl-ease),
+              box-shadow var(--sl-dur-fast) var(--sl-ease);
+}
+.sl-field textarea { border-radius: var(--sl-r-lg); }
+.sl-field input::placeholder,
+.sl-field textarea::placeholder { color: var(--sl-fg-faint); }
+.sl-field input:focus,
+.sl-field textarea:focus,
+.sl-field select:focus {
+  border-color: var(--sl-fg);
+  box-shadow: 0 0 0 3px var(--sl-accent-glow);
+}
+
+/* ============================================================
+   FAQ item
+   ============================================================ */
+.sl-faq-item {
+  background: var(--sl-bg-alt);
+  border: var(--sl-bw-hair) solid var(--sl-line);
+  border-radius: var(--sl-r-lg);
+  padding: var(--sl-sp-5);
+  margin-bottom: var(--sl-sp-3);
+  cursor: pointer;
+  display: flex;
+  flex-direction: column;
+  transition: border-color var(--sl-dur-fast) var(--sl-ease);
+}
+.sl-faq-item:hover { border-color: var(--sl-line-strong); }
+.sl-faq-item.open { border-color: var(--sl-line-hard); background: var(--sl-surface); }
+.sl-faq-item .q-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: var(--sl-sp-4);
+}
+.sl-faq-item .q {
+  font-family: var(--sl-ff-display);
+  font-size: var(--sl-fs-h4);
+  text-transform: uppercase;
+  letter-spacing: -0.01em;
+  color: var(--sl-fg);
+  line-height: 1.2;
+}
+.sl-faq-item .chev {
+  width: 32px;
+  height: 32px;
+  flex-shrink: 0;
+  display: grid;
+  place-items: center;
+  border-radius: 50%;
+  background: var(--sl-bg);
+  color: var(--sl-fg-soft);
+  transition: transform var(--sl-dur-med) var(--sl-ease),
+              background var(--sl-dur-fast) var(--sl-ease),
+              color var(--sl-dur-fast) var(--sl-ease);
+}
+.sl-faq-item.open .chev {
+  transform: rotate(180deg);
+  background: var(--sl-fg);
+  color: var(--sl-accent-ink);
+}
+.sl-faq-item .a {
+  display: grid;
+  grid-template-rows: 0fr;
+  transition: grid-template-rows var(--sl-dur-med) var(--sl-ease),
+              margin-top var(--sl-dur-med) var(--sl-ease);
+  color: var(--sl-fg-soft);
+  font-size: var(--sl-fs-body);
+  line-height: 1.65;
+  max-width: 680px;
+}
+.sl-faq-item .a > * { overflow: hidden; min-height: 0; }
+.sl-faq-item .a p { margin: 0; }
+.sl-faq-item.open .a {
+  grid-template-rows: 1fr;
+  margin-top: var(--sl-sp-3);
+}
+
+/* ============================================================
+   Code block — rare, for dev snippets
+   ============================================================ */
+.sl-code {
+  display: block;
+  background: var(--sl-bg-dark);
+  color: var(--sl-fg);
+  border: var(--sl-bw-hair) solid var(--sl-line);
+  border-radius: var(--sl-r-lg);
+  padding: var(--sl-sp-5);
+  font-family: var(--sl-ff-mono);
+  font-size: 13px;
+  line-height: 1.7;
+  overflow-x: auto;
+}
+.sl-code .kw   { color: var(--sl-fg); font-weight: 500; }
+.sl-code .str  { color: var(--sl-fg-soft); }
+.sl-code .prop { color: #E8A855; }
+.sl-code .cmt  { color: var(--sl-fg-muted); font-style: italic; }
