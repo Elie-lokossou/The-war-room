@@ -110,7 +110,7 @@ python demo/run_demo.py
 
 ### 3. Launching the Web Dashboard Prototype (Phase 6)
 Open the styled incident dashboard prototype in your web browser:
-- Locate the file [ui/dashboard.html](file:///c:/Users/simran%20gupta/Coding/webDevelopment/projects/Not%20so%20completed%20projects/the%20war%20room/ui/dashboard.html) and open it in any standard browser.
+- Open [ui/dashboard.html](ui/dashboard.html) directly in any browser.
 - Click **"Execute Triage"** to simulate the real-time swarm orchestration, agent completion bars, and the final resolution output.
 
 ### 4. Running the Test Suite
