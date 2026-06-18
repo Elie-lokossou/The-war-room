@@ -33,7 +33,7 @@ python demo/run_demo.py
 When you run the simulation, it steps through **5 key stages** representing a real-world SRE Incident Command protocol:
 
 ### Stage 1: Incident Commander Triage Allocation
-- **What happens:** An incoming incident alert (loaded from [alert.json](file:///c:/Users/simran%20gupta/Coding/webDevelopment/projects/Not%20so%20completed%20projects/the%20war%20room/data/inc-001/alert.json)) triggers the system. The **Incident Commander** registers the alert and spawns 4 targeted triage tasks on the `triage-tasks` channel, assigning them to their respective specialized agents.
+- **What happens:** An incoming incident alert (loaded from [alert.json](file:///home/elie/Downloads/Hack/The-war-room/data/inc-001/alert.json)) triggers the system. The **Incident Commander** registers the alert and spawns 4 targeted triage tasks on the `triage-tasks` channel, assigning them to their respective specialized agents.
 - **Console Output:** Shows the alert metadata (Severity: HIGH, Title, Description) and the 4 published tasks fanning out.
 
 ### Stage 2: Multi-Agent Parallel Domain Triage

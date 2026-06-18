@@ -1,0 +1,686 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>The War Room — Autonomous AI Incident Response Swarm</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Archivo+Black&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="assets/tokens.css">
+    <link rel="stylesheet" href="assets/components.css">
+    <style>
+        body {
+            background-color: #070A13;
+            background-image: 
+                radial-gradient(at 0% 0%, rgba(0, 180, 216, 0.12) 0px, transparent 50%),
+                radial-gradient(at 100% 100%, rgba(16, 185, 129, 0.05) 0px, transparent 50%);
+            overflow-x: hidden;
+        }
+
+        /* --- Header / Navigation overrides --- */
+        .header-nav {
+            max-width: 1200px;
+            margin: 0 auto;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+            backdrop-filter: blur(10px);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        /* --- Hero Section --- */
+        .hero {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: var(--sl-sp-9) var(--sl-sp-7);
+            display: grid;
+            grid-template-columns: 1.1fr 0.9fr;
+            gap: var(--sl-sp-8);
+            align-items: center;
+        }
+
+        @media (max-width: 968px) {
+            .hero {
+                grid-template-columns: 1fr;
+                text-align: center;
+                padding: var(--sl-sp-7) var(--sl-sp-5);
+            }
+        }
+
+        .hero-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            background: rgba(0, 180, 216, 0.08);
+            border: 1px solid rgba(0, 180, 216, 0.25);
+            color: #00B4D8;
+            padding: 6px 16px;
+            border-radius: 99px;
+            font-size: var(--sl-fs-micro);
+            font-weight: var(--sl-fw-bold);
+            letter-spacing: var(--sl-tracking-label);
+            text-transform: uppercase;
+            margin-bottom: var(--sl-sp-4);
+        }
+
+        .hero-title {
+            font-size: clamp(48px, 6.5vw, 84px);
+            margin: 0 0 var(--sl-sp-4) 0;
+            line-height: 0.9;
+        }
+
+        .hero-subtitle {
+            font-size: var(--sl-fs-body-lg);
+            color: var(--sl-fg-soft);
+            max-width: 600px;
+            margin-bottom: var(--sl-sp-6);
+            line-height: 1.6;
+        }
+
+        .hero-actions {
+            display: flex;
+            gap: var(--sl-sp-4);
+        }
+
+        @media (max-width: 968px) {
+            .hero-actions {
+                justify-content: center;
+            }
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, #00B4D8, #10B981);
+            color: #070A13;
+            border: none;
+            box-shadow: 0 4px 20px rgba(0, 180, 216, 0.35);
+        }
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 24px rgba(0, 180, 216, 0.45);
+            background: linear-gradient(135deg, #00B4D8, #10B981);
+        }
+
+        /* --- Swarm Interactive Visual --- */
+        .swarm-visual {
+            position: relative;
+            aspect-ratio: 1;
+            background: rgba(27, 38, 59, 0.3);
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            border-radius: var(--sl-r-lg);
+            overflow: hidden;
+            display: grid;
+            place-items: center;
+            box-shadow: var(--sl-shadow-lg);
+        }
+
+        .visual-grid {
+            position: absolute;
+            inset: 0;
+            background-image: 
+                linear-gradient(rgba(255, 255, 255, 0.02) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(255, 255, 255, 0.02) 1px, transparent 1px);
+            background-size: 30px 30px;
+        }
+
+        .visual-node {
+            width: 70px;
+            height: 70px;
+            border-radius: 50%;
+            background: rgba(7, 10, 19, 0.9);
+            border: 2px solid var(--border-color, var(--sl-line-strong));
+            display: grid;
+            place-items: center;
+            position: absolute;
+            box-shadow: 0 0 20px var(--shadow-color, transparent);
+            transition: all 0.3s var(--sl-ease);
+            cursor: pointer;
+            z-index: 10;
+        }
+
+        .visual-node:hover {
+            transform: scale(1.1);
+        }
+
+        .visual-node .abbr {
+            font-family: var(--sl-ff-display);
+            font-size: 14px;
+            color: var(--fg-color, var(--sl-fg));
+        }
+
+        .visual-node .badge-tag {
+            font-size: 9px;
+            font-weight: 700;
+            color: var(--tag-color, var(--sl-fg-muted));
+            position: absolute;
+            bottom: -20px;
+            white-space: nowrap;
+            letter-spacing: var(--sl-tracking-label);
+            text-transform: uppercase;
+        }
+
+        /* Connection lines */
+        .connection-canvas {
+            position: absolute;
+            inset: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 1;
+        }
+
+        /* --- Stats Panel --- */
+        .stats-banner {
+            max-width: 1200px;
+            margin: 0 auto var(--sl-sp-8) auto;
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: var(--sl-sp-5);
+            padding: 0 var(--sl-sp-7);
+        }
+
+        @media (max-width: 768px) {
+            .stats-banner {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+
+        .stat-card {
+            background: rgba(255, 255, 255, 0.02);
+            border: 1px solid rgba(255, 255, 255, 0.04);
+            border-radius: var(--sl-r-md);
+            padding: var(--sl-sp-5);
+            text-align: center;
+        }
+
+        .stat-value {
+            font-family: var(--sl-ff-display);
+            font-size: var(--sl-fs-h1);
+            color: var(--sl-fg);
+            line-height: 1;
+            margin-bottom: 4px;
+            background: linear-gradient(135deg, #00B4D8, #10B981);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .stat-label {
+            font-size: var(--sl-fs-micro);
+            font-weight: var(--sl-fw-semibold);
+            color: var(--sl-fg-muted);
+            letter-spacing: var(--sl-tracking-label);
+            text-transform: uppercase;
+        }
+
+        /* --- Features Section --- */
+        .section-wrap {
+            max-width: 1200px;
+            margin: 0 auto var(--sl-sp-9) auto;
+            padding: 0 var(--sl-sp-7);
+        }
+
+        .section-header {
+            margin-bottom: var(--sl-sp-7);
+            text-align: center;
+        }
+
+        .section-label {
+            font-size: var(--sl-fs-micro);
+            font-weight: var(--sl-fw-bold);
+            color: #00B4D8;
+            letter-spacing: var(--sl-tracking-label);
+            text-transform: uppercase;
+            margin-bottom: 8px;
+            display: block;
+        }
+
+        .section-title {
+            font-family: var(--sl-ff-display);
+            font-size: var(--sl-fs-h2);
+            margin: 0;
+            text-transform: uppercase;
+        }
+
+        .agents-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: var(--sl-sp-6);
+        }
+
+        @media (max-width: 968px) {
+            .agents-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+        @media (max-width: 640px) {
+            .agents-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        .agent-item-card {
+            background: rgba(27, 38, 59, 0.25);
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            border-radius: var(--sl-r-lg);
+            padding: var(--sl-sp-6);
+            display: flex;
+            flex-direction: column;
+            gap: var(--sl-sp-4);
+            transition: all 0.3s var(--sl-ease);
+        }
+
+        .agent-item-card:hover {
+            transform: translateY(-4px);
+            border-color: rgba(0, 180, 216, 0.3);
+            background: rgba(27, 38, 59, 0.4);
+        }
+
+        .agent-badge {
+            background: rgba(255, 255, 255, 0.04);
+            color: var(--sl-fg-soft);
+            padding: 4px 10px;
+            border-radius: 4px;
+            font-size: 10px;
+            font-weight: 700;
+            width: fit-content;
+            text-transform: uppercase;
+            letter-spacing: var(--sl-tracking-label);
+            border: 1px solid rgba(255, 255, 255, 0.06);
+        }
+
+        .agent-badge.commander { background: rgba(0, 180, 216, 0.08); border-color: rgba(0, 180, 216, 0.2); color: #00B4D8; }
+        .agent-badge.metrics { background: rgba(16, 185, 129, 0.08); border-color: rgba(16, 185, 129, 0.2); color: #10B981; }
+        .agent-badge.logs { background: rgba(245, 158, 11, 0.08); border-color: rgba(245, 158, 11, 0.2); color: #F59E0B; }
+        .agent-badge.change { background: rgba(139, 92, 246, 0.08); border-color: rgba(139, 92, 246, 0.2); color: #A78BFA; }
+        .agent-badge.runbook { background: rgba(239, 68, 68, 0.08); border-color: rgba(239, 68, 68, 0.2); color: #EF4444; }
+
+        .agent-name {
+            font-family: var(--sl-ff-display);
+            font-size: var(--sl-fs-h4);
+            margin: 0;
+            text-transform: uppercase;
+        }
+
+        .agent-desc {
+            color: var(--sl-fg-soft);
+            font-size: var(--sl-fs-small);
+            line-height: 1.5;
+            margin: 0;
+        }
+
+        .agent-framework {
+            font-size: var(--sl-fs-micro);
+            font-family: var(--sl-ff-mono);
+            color: var(--sl-fg-muted);
+            margin-top: auto;
+            border-top: 1px dashed rgba(255, 255, 255, 0.06);
+            padding-top: 12px;
+        }
+
+        /* --- Protocol/Steps Section --- */
+        .timeline-steps {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: var(--sl-sp-5);
+            margin-top: var(--sl-sp-6);
+        }
+
+        @media (max-width: 968px) {
+            .timeline-steps {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+        @media (max-width: 640px) {
+            .timeline-steps {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        .step-item {
+            position: relative;
+            background: rgba(255, 255, 255, 0.01);
+            border: 1px solid rgba(255, 255, 255, 0.03);
+            border-radius: var(--sl-r-md);
+            padding: var(--sl-sp-5);
+        }
+
+        .step-num {
+            font-family: var(--sl-ff-display);
+            font-size: 32px;
+            color: rgba(255, 255, 255, 0.1);
+            position: absolute;
+            top: 12px;
+            right: 16px;
+        }
+
+        .step-title {
+            font-weight: var(--sl-fw-bold);
+            font-size: var(--sl-fs-body);
+            margin-bottom: 8px;
+            text-transform: uppercase;
+            color: var(--sl-fg);
+        }
+
+        .step-desc {
+            font-size: var(--sl-fs-small);
+            color: var(--sl-fg-muted);
+            line-height: 1.5;
+            margin: 0;
+        }
+
+        /* --- CTA Block --- */
+        .cta-block {
+            background: linear-gradient(135deg, rgba(27, 38, 59, 0.8), rgba(10, 15, 30, 0.8));
+            border: 1px solid rgba(255, 255, 255, 0.06);
+            border-radius: var(--sl-r-lg);
+            padding: var(--sl-sp-8) var(--sl-sp-6);
+            text-align: center;
+            margin-bottom: var(--sl-sp-9);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .cta-title {
+            font-family: var(--sl-ff-display);
+            font-size: var(--sl-fs-h2);
+            margin: 0 0 var(--sl-sp-3) 0;
+            text-transform: uppercase;
+        }
+
+        .cta-desc {
+            color: var(--sl-fg-soft);
+            max-width: 550px;
+            margin: 0 auto var(--sl-sp-6) auto;
+            font-size: var(--sl-fs-body);
+            line-height: 1.6;
+        }
+
+        /* --- Footer --- */
+        .footer {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: var(--sl-sp-6) var(--sl-sp-7);
+            border-top: 1px solid rgba(255, 255, 255, 0.06);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-size: var(--sl-fs-micro);
+            color: var(--sl-fg-muted);
+        }
+
+        @media (max-width: 640px) {
+            .footer {
+                flex-direction: column;
+                gap: var(--sl-sp-3);
+                text-align: center;
+            }
+        }
+    </style>
+</head>
+<body class="sl-body sl-grain">
+
+    <!-- NAVIGATION HEADER -->
+    <nav class="sl-nav header-nav">
+        <a href="index.html" class="sl-logo">
+            <span class="mark"></span>
+            THE WAR ROOM
+        </a>
+        <div class="sl-nav-links">
+            <a href="index.html" class="active">Overview</a>
+            <a href="dashboard.html">Console</a>
+        </div>
+        <div class="sl-nav-right">
+            <a href="dashboard.html" class="btn btn--sm btn-primary">Launch Console</a>
+        </div>
+    </nav>
+
+    <!-- HERO SECTION -->
+    <header class="hero">
+        <div class="hero-content">
+            <div class="hero-badge">
+                <span>Swarm Orchestrator v1.0</span>
+            </div>
+            <h1 class="hero-title sl-display">AI Incident Response</h1>
+            <p class="hero-subtitle">
+                Automate cloud infrastructure triage, collaborative agent deliberation, confidence-scored verdicts, and human-in-the-loop remediation. Powered by a coordinated swarm of AI agents.
+            </p>
+            <div class="hero-actions">
+                <a href="dashboard.html" class="btn btn--lg btn-primary">Launch Console <span class="arrow">→</span></a>
+                <a href="https://github.com/vib3withsimran/The-war-room" target="_blank" class="btn btn--lg btn--ghost">GitHub Repository</a>
+            </div>
+        </div>
+
+        <div class="swarm-visual">
+            <div class="visual-grid"></div>
+            <canvas class="connection-canvas" id="connections"></canvas>
+
+            <!-- Commander Node -->
+            <div class="visual-node" id="node-cmd" style="top: 40%; left: 40%; --border-color: #00B4D8; --shadow-color: rgba(0, 180, 216, 0.4); --fg-color: #00B4D8;">
+                <span class="abbr">CMD</span>
+                <span class="badge-tag" style="--tag-color: #00B4D8;">Commander</span>
+            </div>
+
+            <!-- Metrics Agent Node -->
+            <div class="visual-node" id="node-mt" style="top: 15%; left: 15%; --border-color: #10B981; --shadow-color: rgba(16, 185, 129, 0.2); --fg-color: #10B981;">
+                <span class="abbr">MET</span>
+                <span class="badge-tag" style="--tag-color: #10B981;">Metrics</span>
+            </div>
+
+            <!-- Logs Agent Node -->
+            <div class="visual-node" id="node-lg" style="top: 15%; left: 65%; --border-color: #F59E0B; --shadow-color: rgba(245, 158, 11, 0.2); --fg-color: #F59E0B;">
+                <span class="abbr">LOG</span>
+                <span class="badge-tag" style="--tag-color: #F59E0B;">Logs</span>
+            </div>
+
+            <!-- Change Agent Node -->
+            <div class="visual-node" id="node-ch" style="top: 65%; left: 15%; --border-color: #A78BFA; --shadow-color: rgba(167, 139, 250, 0.2); --fg-color: #A78BFA;">
+                <span class="abbr">CHG</span>
+                <span class="badge-tag" style="--tag-color: #A78BFA;">Changes</span>
+            </div>
+
+            <!-- Runbook Agent Node -->
+            <div class="visual-node" id="node-rb" style="top: 65%; left: 65%; --border-color: #EF4444; --shadow-color: rgba(239, 68, 68, 0.2); --fg-color: #EF4444;">
+                <span class="abbr">RBK</span>
+                <span class="badge-tag" style="--tag-color: #EF4444;">Runbooks</span>
+            </div>
+        </div>
+    </header>
+
+    <!-- LIVE STATS BANNER -->
+    <section class="stats-banner">
+        <div class="stat-card">
+            <div class="stat-value" id="stat-scenarios">3</div>
+            <div class="stat-label">Simulated Scenarios</div>
+        </div>
+        <div class="stat-card">
+            <div class="stat-value" id="stat-confidence">86%</div>
+            <div class="stat-label">Avg Swarm Confidence</div>
+        </div>
+        <div class="stat-card">
+            <div class="stat-value" id="stat-mttr">2.8s</div>
+            <div class="stat-label">Avg Remediation MTTR</div>
+        </div>
+        <div class="stat-card">
+            <div class="stat-value" id="stat-agents">5</div>
+            <div class="stat-label">Active Swarm Agents</div>
+        </div>
+    </section>
+
+    <!-- AGENT SWARM SHOWCASE -->
+    <section class="section-wrap">
+        <div class="section-header">
+            <span class="section-label">The Cooperative Swarm</span>
+            <h2 class="section-title">Specialized AI Agents</h2>
+        </div>
+        <div class="agents-grid">
+            <!-- Commander Agent -->
+            <div class="agent-item-card">
+                <span class="agent-badge commander">Orchestrator</span>
+                <h3 class="agent-name">Incident Commander</h3>
+                <p class="agent-desc">Ingests alerts, creates incident workspaces, coordinates parallel diagnostics, facilitates agent deliberation, scores confidence, and triggers auto-remediation.</p>
+                <div class="agent-framework">Framework: LangGraph (Stateful Swarms)</div>
+            </div>
+
+            <!-- Metrics Agent -->
+            <div class="agent-item-card">
+                <span class="agent-badge metrics">Telemetry</span>
+                <h3 class="agent-name">Metrics Agent</h3>
+                <p class="agent-desc">Monitors infrastructure, detects anomaly signals (CPU, latency spikes, DB locks), and calculates saturation thresholds in target incident windows.</p>
+                <div class="agent-framework">Framework: CrewAI (Telemetry Specialist)</div>
+            </div>
+
+            <!-- Logs Agent -->
+            <div class="agent-item-card">
+                <span class="agent-badge logs">Code Audit</span>
+                <h3 class="agent-name">Logs Agent</h3>
+                <p class="agent-desc">Parses system logs, correlates error frequency bucket timestamps, extracts stack traces and exception signatures, and flags root errors.</p>
+                <div class="agent-framework">Framework: Anthropic SDK (Pattern Recognition)</div>
+            </div>
+
+            <!-- Change Agent -->
+            <div class="agent-item-card">
+                <span class="agent-badge change">CI/CD & Deploy</span>
+                <h3 class="agent-name">Change Agent</h3>
+                <p class="agent-desc">Audits code releases, configuration deployments, and schema migrations. Automatically correlates deployment events to incident start times.</p>
+                <div class="agent-framework">Framework: Pydantic AI (Type-Safe Telemetry)</div>
+            </div>
+
+            <!-- Runbook Agent -->
+            <div class="agent-item-card">
+                <span class="agent-badge runbook">Playbooks</span>
+                <h3 class="agent-name">Runbook Agent</h3>
+                <p class="agent-desc">Scans internal repositories for matching system runbooks, checks procedure staleness (e.g. pool configurations), and recommends actions.</p>
+                <div class="agent-framework">Framework: Claude SDK (Procedural Retrieval)</div>
+            </div>
+
+            <!-- Evidence Store -->
+            <div class="agent-item-card">
+                <span class="agent-badge">Shared Store</span>
+                <h3 class="agent-name">Evidence & Scorer</h3>
+                <p class="agent-desc">Maintains an in-memory evidence ledger of all agent observations. Computes weighted confidence scores with bonus modifiers from deliberation.</p>
+                <div class="agent-framework">Math Engine: Weighted Gating Model</div>
+            </div>
+        </div>
+    </section>
+
+    <!-- INCIDENT PROTOCOL TIMELINE -->
+    <section class="section-wrap">
+        <div class="section-header">
+            <span class="section-label">Automated Workflow</span>
+            <h2 class="section-title">Incident Response Pipeline</h2>
+        </div>
+        <div class="timeline-steps">
+            <div class="step-item">
+                <span class="step-num">01</span>
+                <h4 class="step-title">Triage & Ingestion</h4>
+                <p class="step-desc">Alerts are captured. Incident space is constructed, and domains tasks are published to the Band queue.</p>
+            </div>
+            <div class="step-item">
+                <span class="step-num">02</span>
+                <h4 class="step-title">Cooperative Swarm</h4>
+                <p class="step-desc">Specialized agents analyze metrics, logs, deploys, and runbooks in parallel, sharing evidence markers.</p>
+            </div>
+            <div class="step-item">
+                <span class="step-num">03</span>
+                <h4 class="step-title">Deliberation Room</h4>
+                <p class="step-desc">Agents cross-reference findings via deliberation channels (Agreeing, Challenging, Connecting signals).</p>
+            </div>
+            <div class="step-item">
+                <span class="step-num">04</span>
+                <h4 class="step-title">Verdict & Git-Ops</h4>
+                <p class="step-desc">Commander formulates confidence-weighted verdict, executes remediation plan, and auto-commits the postmortem.</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- CTA BANNER -->
+    <section class="section-wrap">
+        <div class="cta-block">
+            <h2 class="cta-title">Test the Swarm</h2>
+            <p class="cta-desc">Launch the Incident Commander console to simulate incidents and observe cooperative AI agents collaborating to resolve production outages.</p>
+            <a href="dashboard.html" class="btn btn--lg btn-primary">Start Live Simulation <span class="arrow">→</span></a>
+        </div>
+    </section>
+
+    <!-- FOOTER -->
+    <footer class="footer">
+        <div>© 2026 The War Room Swarm. Built with Band SDK, LangGraph, CrewAI & Pydantic AI.</div>
+        <div>Hackathon Project Prototype</div>
+    </footer>
+
+    <!-- load scenarios.js to dynamically compute stats -->
+    <script src="scenarios.js"></script>
+    <script>
+        // Draw connection lines on canvas
+        function drawConnections() {
+            const canvas = document.getElementById('connections');
+            const container = canvas.parentElement;
+            canvas.width = container.offsetWidth;
+            canvas.height = container.offsetHeight;
+            const ctx = canvas.getContext('2d');
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+            const cmd = document.getElementById('node-cmd');
+            const mt = document.getElementById('node-mt');
+            const lg = document.getElementById('node-lg');
+            const ch = document.getElementById('node-ch');
+            const rb = document.getElementById('node-rb');
+
+            function getCenter(el) {
+                return {
+                    x: el.offsetLeft + el.offsetWidth / 2,
+                    y: el.offsetTop + el.offsetHeight / 2
+                };
+            }
+
+            const pCmd = getCenter(cmd);
+            const targets = [getCenter(mt), getCenter(lg), getCenter(ch), getCenter(rb)];
+
+            ctx.lineWidth = 1.5;
+            
+            // Draw lines with gradient
+            targets.forEach(t => {
+                const grad = ctx.createLinearGradient(pCmd.x, pCmd.y, t.x, t.y);
+                grad.addColorStop(0, 'rgba(0, 180, 216, 0.4)');
+                grad.addColorStop(1, 'rgba(255, 255, 255, 0.05)');
+                
+                ctx.strokeStyle = grad;
+                ctx.beginPath();
+                ctx.moveTo(pCmd.x, pCmd.y);
+                ctx.lineTo(t.x, t.y);
+                ctx.stroke();
+            });
+        }
+
+        window.addEventListener('load', () => {
+            drawConnections();
+            
+            // Parse scenarios.js variables to compute live dashboard metrics
+            if (window.WAR_ROOM_SCENARIOS) {
+                const data = window.WAR_ROOM_SCENARIOS;
+                const order = data.order || [];
+                const scenarios = data.scenarios || {};
+                
+                let totalConf = 0;
+                let count = 0;
+                
+                order.forEach(id => {
+                    const s = scenarios[id];
+                    if (s) {
+                        totalConf += s.confidence;
+                        count++;
+                    }
+                });
+
+                document.getElementById('stat-scenarios').textContent = count;
+                if (count > 0) {
+                    const avgConfPct = Math.round((totalConf / count) * 100);
+                    document.getElementById('stat-confidence').textContent = avgConfPct + '%';
+                }
+            }
+        });
+        
+        window.addEventListener('resize', drawConnections);
+    </script>
+</body>
+</html>

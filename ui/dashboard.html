@@ -426,16 +426,253 @@
 
         .empty-hint { color: var(--fg-muted); font-size: 14px; margin-top: 16px; }
         .error-banner { color: #EF4444; background: rgba(239, 68, 68, 0.1); padding: 16px 20px; border-radius: 12px; max-width: 1000px; border: 1px solid rgba(239, 68, 68, 0.2); }
+
+        /* --- Sub navigation tabs --- */
+        .tab-bar {
+            display: flex;
+            gap: 8px;
+            padding: 6px;
+            margin-bottom: 32px;
+            max-width: 1000px;
+            background: rgba(255, 255, 255, 0.02);
+            border: 1px solid var(--border);
+            border-radius: 26px;
+            width: fit-content;
+        }
+
+        .tab-btn {
+            background: transparent;
+            border: 1px solid transparent;
+            color: var(--fg-muted);
+            padding: 8px 18px;
+            font-size: 12px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            outline: none;
+            border-radius: 20px;
+        }
+
+        .tab-btn:hover {
+            color: var(--fg);
+            background: rgba(255, 255, 255, 0.04);
+            border-color: rgba(255, 255, 255, 0.08);
+        }
+
+        .tab-btn.active {
+            color: #070A13;
+            background: linear-gradient(135deg, var(--accent), var(--success));
+            border-color: transparent;
+            box-shadow: 0 0 15px var(--accent-glow);
+        }
+        
+        .tab-pane {
+            animation: fadeIn 0.4s ease-out;
+        }
+
+        /* --- Service Topology Map --- */
+        .topology-container {
+            background: rgba(27, 38, 59, 0.2);
+            border: 1px solid var(--border);
+            border-radius: var(--radius-lg);
+            padding: 40px;
+            position: relative;
+            height: 380px;
+            margin-bottom: 32px;
+            max-width: 1000px;
+            display: grid;
+            place-items: center;
+            overflow: hidden;
+            box-shadow: var(--shadow);
+        }
+        
+        .topology-grid {
+            position: absolute;
+            inset: 0;
+            background-image: 
+                linear-gradient(rgba(255, 255, 255, 0.01) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(255, 255, 255, 0.01) 1px, transparent 1px);
+            background-size: 20px 20px;
+        }
+
+        .topo-svg {
+            position: absolute;
+            inset: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 1;
+        }
+
+        .topo-svg line {
+            stroke: rgba(0, 180, 216, 0.25);
+            stroke-width: 2;
+            stroke-dasharray: 6, 6;
+            animation: topo-dash 25s linear infinite;
+        }
+
+        @keyframes topo-dash {
+            to {
+                stroke-dashoffset: -1000;
+            }
+        }
+
+        .topo-node {
+            width: 125px;
+            height: 55px;
+            border-radius: 8px;
+            background: rgba(7, 10, 19, 0.9);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            position: absolute;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.5);
+            transition: all 0.3s ease;
+            z-index: 10;
+        }
+        
+        .topo-node:hover {
+            transform: scale(1.05);
+            border-color: rgba(255, 255, 255, 0.2);
+        }
+
+        .topo-node.active-alert {
+            border-color: var(--danger);
+            box-shadow: 0 0 15px rgba(239, 68, 68, 0.4);
+            animation: pulse-red 2s infinite ease-in-out;
+        }
+        
+        .topo-node.active-warning {
+            border-color: var(--warning);
+            box-shadow: 0 0 15px rgba(245, 158, 11, 0.4);
+            animation: pulse-orange 2s infinite ease-in-out;
+        }
+
+        .topo-node.healthy {
+            border-color: var(--success);
+            box-shadow: 0 0 10px rgba(16, 185, 129, 0.15);
+        }
+
+        .topo-node-name {
+            font-size: 11px;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            color: var(--fg);
+        }
+
+        .topo-node-status {
+            font-size: 9px;
+            font-weight: 600;
+            color: var(--fg-muted);
+            margin-top: 2px;
+            text-transform: uppercase;
+        }
+        
+        .topo-node.healthy .topo-node-status { color: var(--success); }
+        .topo-node.active-alert .topo-node-status { color: var(--danger); }
+        .topo-node.active-warning .topo-node-status { color: var(--warning); }
+
+        @keyframes pulse-red {
+            0% { box-shadow: 0 0 8px rgba(239, 68, 68, 0.3); border-color: rgba(239, 68, 68, 0.5); }
+            50% { box-shadow: 0 0 20px rgba(239, 68, 68, 0.6); border-color: rgba(239, 68, 68, 1); }
+            100% { box-shadow: 0 0 8px rgba(239, 68, 68, 0.3); border-color: rgba(239, 68, 68, 0.5); }
+        }
+
+        @keyframes pulse-orange {
+            0% { box-shadow: 0 0 8px rgba(245, 158, 11, 0.3); border-color: rgba(245, 158, 11, 0.5); }
+            50% { box-shadow: 0 0 20px rgba(245, 158, 11, 0.6); border-color: rgba(245, 158, 11, 1); }
+            100% { box-shadow: 0 0 8px rgba(245, 158, 11, 0.3); border-color: rgba(245, 158, 11, 0.5); }
+        }
+
+        /* --- Swarm Settings Pane --- */
+        .settings-card {
+            background: var(--surface);
+            backdrop-filter: blur(16px);
+            border: 1px solid var(--border);
+            border-radius: var(--radius-lg);
+            padding: 32px;
+            box-shadow: var(--shadow-lg);
+            margin-bottom: 32px;
+            max-width: 1000px;
+            display: flex;
+            flex-direction: column;
+            gap: 24px;
+        }
+
+        .settings-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 32px;
+        }
+
+        @media (max-width: 768px) {
+            .settings-grid { grid-template-columns: 1fr; }
+        }
+
+        .settings-group {
+            display: flex;
+            flex-direction: column;
+            gap: 16px;
+        }
+
+        .setting-row {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+            text-align: left;
+        }
+
+        .setting-row label {
+            font-size: 11px;
+            font-weight: 700;
+            color: var(--fg);
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            display: flex;
+            justify-content: space-between;
+        }
+
+        .setting-row input[type="range"] {
+            width: 100%;
+            accent-color: var(--accent);
+            background: rgba(255,255,255,0.08);
+            border-radius: 4px;
+            height: 6px;
+            outline: none;
+            margin: 8px 0;
+        }
+
+        .setting-row textarea {
+            background: rgba(7, 10, 19, 0.5);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            padding: 12px;
+            color: var(--fg);
+            font-family: var(--font-mono);
+            font-size: 12px;
+            resize: vertical;
+            min-height: 80px;
+            outline: none;
+        }
+        
+        .setting-row textarea:focus {
+            border-color: var(--accent);
+        }
     </style>
 </head>
 <body>
 
     <!-- SIDEBAR -->
     <aside class="sidebar">
-        <div class="logo">
+        <a href="index.html" class="logo" style="text-decoration: none; display: flex; align-items: center; gap: 12px; color: var(--fg);">
             <div class="logo-icon"></div>
             War Room Studio
-        </div>
+        </a>
 
         <div class="nav-group">
             <div class="nav-label">Incident Scenarios</div>
@@ -462,82 +699,223 @@
                 <div class="meta-line" id="incident-meta"></div>
             </div>
 
-            <div id="verdict-section" class="verdict-card hidden">
-                <div class="verdict-main">
-                    <h2>Resolution Strategy</h2>
-                    <div class="verdict-content" id="verdict-msg"></div>
-                    <div class="verdict-rootcause" id="verdict-rootcause"></div>
-                    <div class="verdict-confidence" id="verdict-confidence"></div>
-                </div>
-                <div class="verdict-side">
-                    <h2>Recommended Actions</h2>
-                    <div id="action-list" class="action-list"></div>
-                </div>
+            <!-- SUB-NAVIGATION TABS -->
+            <div class="tab-bar">
+                <button class="tab-btn active" data-tab="ops">🌐 Live Ops & Topology</button>
+                <button class="tab-btn" data-tab="swarm">💬 Swarm Deliberation</button>
+                <button class="tab-btn" data-tab="remediation">🛠️ Remediation Console</button>
+                <button class="tab-btn" data-tab="postmortem">📝 Postmortem Vault</button>
+                <button class="tab-btn" data-tab="settings">⚙️ Swarm Settings</button>
             </div>
 
-            <!-- REMEDIATION PANEL -->
-            <div id="remediation-section" class="verdict-card hidden" style="grid-template-columns: 1fr; margin-top: 24px;">
-                <div style="display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid var(--border); padding-bottom: 16px; margin-bottom: 16px;">
-                    <div>
-                        <h2 style="margin: 0; font-size: 14px; color: var(--fg-muted); text-transform: uppercase; letter-spacing: 0.1em;">Remediation Engine</h2>
-                        <div id="remediation-status" style="font-size: 18px; font-weight: 600; color: var(--fg); margin-top: 4px;">Pending Human Approval</div>
+            <!-- TAB PANE: LIVE OPS & TOPOLOGY -->
+            <div id="pane-ops" class="tab-pane">
+                <div class="topology-container">
+                    <div class="topology-grid"></div>
+                    <svg class="topo-svg" id="topo-connections"></svg>
+                    
+                    <!-- Service Nodes -->
+                    <div class="topo-node healthy" id="node-gw" style="top: 40%; left: 10%;">
+                        <span class="topo-node-name">API Gateway</span>
+                        <span class="topo-node-status">Healthy</span>
                     </div>
-                    <button id="run-remediation" class="btn-primary" style="margin: 0;">▶ Run Remediation</button>
-                </div>
-                <div id="remediation-actions-container" class="hidden">
-                    <h2 style="font-size: 12px; color: var(--fg-muted); text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 12px;">Executing Actions</h2>
-                    <div id="remediation-steps" style="display: flex; flex-direction: column; gap: 12px;">
-                        <!-- Steps will be generated here -->
+                    <div class="topo-node healthy" id="node-usr" style="top: 15%; left: 45%;">
+                        <span class="topo-node-name">User Service</span>
+                        <span class="topo-node-status">Healthy</span>
                     </div>
-                </div>
-                <div id="resolved-banner" class="hidden" style="background: #D1FAE5; border: 1px solid #10B981; border-radius: 12px; padding: 20px; display: flex; align-items: center; justify-content: space-between; margin-top: 16px; animation: fadeIn 0.4s ease;">
-                    <div style="display: flex; align-items: center; gap: 12px;">
-                        <span style="font-size: 24px;">✅</span>
-                        <div>
-                            <div style="font-size: 16px; font-weight: 700; color: #065F46;">Incident Resolved Successfully</div>
-                            <div style="font-size: 14px; color: #047857;">All automated remediation procedures completed.</div>
-                        </div>
+                    <div class="topo-node healthy" id="node-pmt" style="top: 65%; left: 45%;">
+                        <span class="topo-node-name">Payment Serv</span>
+                        <span class="topo-node-status">Healthy</span>
                     </div>
-                    <div style="text-align: right;">
-                        <div style="font-size: 12px; font-weight: 600; color: #047857; text-transform: uppercase;">Simulated MTTR</div>
-                        <div id="mttr-display" style="font-size: 24px; font-weight: 800; color: #065F46;">--</div>
+                    <div class="topo-node healthy" id="node-vlt" style="top: 65%; left: 78%;">
+                        <span class="topo-node-name">Vault API</span>
+                        <span class="topo-node-status">Healthy</span>
                     </div>
-                </div>
-            </div>
-
-            <!-- POSTMORTEM PANEL -->
-            <div id="postmortem-section" class="verdict-card hidden" style="grid-template-columns: 1fr; margin-top: 24px;">
-                <div style="display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid var(--border); padding-bottom: 16px; margin-bottom: 16px;">
-                    <div>
-                        <h2 style="margin: 0; font-size: 14px; color: var(--fg-muted); text-transform: uppercase; letter-spacing: 0.1em;">Incident Documentation</h2>
-                        <div style="font-size: 18px; font-weight: 600; color: var(--fg); margin-top: 4px;">📄 Generated Postmortem Report</div>
+                    <div class="topo-node healthy" id="node-db" style="top: 15%; left: 78%;">
+                        <span class="topo-node-name">User DB</span>
+                        <span class="topo-node-status">Healthy</span>
                     </div>
-                    <button id="commit-to-git" class="btn-primary" style="margin: 0; background: var(--accent);">Commit to Git</button>
                 </div>
                 
-                <div id="git-output-container" class="hidden" style="background: #090D16; border-radius: 10px; padding: 20px; font-family: var(--font-mono); font-size: 13px; color: #E2E8F0; margin-bottom: 20px; border: 1px solid rgba(255, 255, 255, 0.05); box-shadow: inset 0 2px 10px rgba(0, 0, 0, 0.8); position: relative; max-height: 250px; overflow-y: auto; text-align: left; padding-top: 32px;">
-                    <!-- Window control dots -->
-                    <div style="position: absolute; top: 12px; left: 15px; display: flex; gap: 6px;">
-                        <span style="width: 10px; height: 10px; background: #FF5F56; border-radius: 50%;"></span>
-                        <span style="width: 10px; height: 10px; background: #FFBD2E; border-radius: 50%;"></span>
-                        <span style="width: 10px; height: 10px; background: #27C93F; border-radius: 50%;"></span>
+                <div class="verdict-card" style="grid-template-columns: 1fr;">
+                    <div>
+                        <h2>Scenario Live Telemetry Feed</h2>
+                        <div style="font-size: 13px; color: var(--fg-muted); line-height: 1.6; text-align: left;">
+                            This Operations View renders live telemetry topology mapped from active scenario alert data. Press <strong>Execute Triage</strong> in the sidebar to trigger the AI Swarm, which will automatically verify anomalies, deliberate root causes, and transition through tabs to guide the resolution workflow.
+                        </div>
                     </div>
-                    <div id="git-terminal-lines"></div>
-                </div>
-
-                <div id="postmortem-content" style="background: #F9FAFB; border: 1px solid var(--border); border-radius: 12px; padding: 24px; font-size: 14px; line-height: 1.6; max-height: 400px; overflow-y: auto; text-align: left;">
-                    <!-- Rendered Postmortem HTML will go here -->
                 </div>
             </div>
 
-            <div id="agents-label" class="section-label hidden">Agent Triage — live findings on #triage-findings</div>
-            <div class="agent-grid" id="agent-grid">
-                <div class="empty-hint" id="grid-hint">Press <strong>Execute Triage</strong> to dispatch the agent band.</div>
+            <!-- TAB PANE: SWARM DELIBERATION -->
+            <div id="pane-swarm" class="tab-pane hidden">
+                <div id="agents-label" class="section-label" style="margin-top: 0;">Agent Triage — live findings on #triage-findings</div>
+                <div class="agent-grid" id="agent-grid" style="margin-top: 16px;">
+                    <div class="empty-hint" id="grid-hint">Press <strong>Execute Triage</strong> to dispatch the agent band.</div>
+                </div>
+
+                <div id="delib-section" class="delib-panel hidden">
+                    <h2>#deliberation — agent cross-talk</h2>
+                    <div id="delib-list"></div>
+                </div>
             </div>
 
-            <div id="delib-section" class="delib-panel hidden">
-                <h2>#deliberation — agent cross-talk</h2>
-                <div id="delib-list"></div>
+            <!-- TAB PANE: REMEDIATION CONSOLE -->
+            <div id="pane-remediation" class="tab-pane hidden">
+                <div id="verdict-section" class="verdict-card hidden">
+                    <div class="verdict-main">
+                        <h2>Resolution Strategy</h2>
+                        <div class="verdict-content" id="verdict-msg"></div>
+                        <div class="verdict-rootcause" id="verdict-rootcause"></div>
+                        <div class="verdict-confidence" id="verdict-confidence"></div>
+                    </div>
+                    <div class="verdict-side">
+                        <h2>Recommended Actions</h2>
+                        <div id="action-list" class="action-list"></div>
+                    </div>
+                </div>
+
+                <!-- REMEDIATION PANEL -->
+                <div id="remediation-section" class="verdict-card hidden" style="grid-template-columns: 1fr; margin-top: 24px;">
+                    <div style="display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid var(--border); padding-bottom: 16px; margin-bottom: 16px;">
+                        <div>
+                            <h2 style="margin: 0; font-size: 14px; color: var(--fg-muted); text-transform: uppercase; letter-spacing: 0.1em;">Remediation Engine</h2>
+                            <div id="remediation-status" style="font-size: 18px; font-weight: 600; color: var(--fg); margin-top: 4px;">Pending Human Approval</div>
+                        </div>
+                        <button id="run-remediation" class="btn-primary" style="margin: 0;">▶ Run Remediation</button>
+                    </div>
+                    <div id="remediation-actions-container" class="hidden">
+                        <h2 style="font-size: 12px; color: var(--fg-muted); text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 12px;">Executing Actions</h2>
+                        <div id="remediation-steps" style="display: flex; flex-direction: column; gap: 12px;">
+                            <!-- Steps will be generated here -->
+                        </div>
+                    </div>
+                    <div id="resolved-banner" class="hidden" style="background: #D1FAE5; border: 1px solid #10B981; border-radius: 12px; padding: 20px; display: flex; align-items: center; justify-content: space-between; margin-top: 16px; animation: fadeIn 0.4s ease;">
+                        <div style="display: flex; align-items: center; gap: 12px;">
+                            <span style="font-size: 24px;">✅</span>
+                            <div>
+                                <div style="font-size: 16px; font-weight: 700; color: #065F46;">Incident Resolved Successfully</div>
+                                <div style="font-size: 14px; color: #047857;">All automated remediation procedures completed.</div>
+                            </div>
+                        </div>
+                        <div style="text-align: right;">
+                            <div style="font-size: 12px; font-weight: 600; color: #047857; text-transform: uppercase;">Simulated MTTR</div>
+                            <div id="mttr-display" style="font-size: 24px; font-weight: 800; color: #065F46;">--</div>
+                        </div>
+                    </div>
+                </div>
+
+                <div id="remediation-placeholder" class="verdict-card" style="grid-template-columns: 1fr;">
+                    <div class="empty-hint" style="text-align: center; margin-top: 0; padding: 40px 0;">
+                        No remediation plan formulated. Execute swarm triage first to generate recommendations.
+                    </div>
+                </div>
+            </div>
+
+            <!-- TAB PANE: POSTMORTEM VAULT -->
+            <div id="pane-postmortem" class="tab-pane hidden">
+                <!-- POSTMORTEM PANEL -->
+                <div id="postmortem-section" class="verdict-card hidden" style="grid-template-columns: 1fr;">
+                    <div style="display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid var(--border); padding-bottom: 16px; margin-bottom: 16px;">
+                        <div>
+                            <h2 style="margin: 0; font-size: 14px; color: var(--fg-muted); text-transform: uppercase; letter-spacing: 0.1em;">Incident Documentation</h2>
+                            <div style="font-size: 18px; font-weight: 600; color: var(--fg); margin-top: 4px;">📄 Generated Postmortem Report</div>
+                        </div>
+                        <button id="commit-to-git" class="btn-primary" style="margin: 0; background: var(--accent);">Commit to Git</button>
+                    </div>
+                    
+                    <div id="git-output-container" class="hidden" style="background: #090D16; border-radius: 10px; padding: 20px; font-family: var(--font-mono); font-size: 13px; color: #E2E8F0; margin-bottom: 20px; border: 1px solid rgba(255, 255, 255, 0.05); box-shadow: inset 0 2px 10px rgba(0, 0, 0, 0.8); position: relative; max-height: 250px; overflow-y: auto; text-align: left; padding-top: 32px;">
+                        <div style="position: absolute; top: 12px; left: 15px; display: flex; gap: 6px;">
+                            <span style="width: 10px; height: 10px; background: #FF5F56; border-radius: 50%;"></span>
+                            <span style="width: 10px; height: 10px; background: #FFBD2E; border-radius: 50%;"></span>
+                            <span style="width: 10px; height: 10px; background: #27C93F; border-radius: 50%;"></span>
+                        </div>
+                        <div id="git-terminal-lines"></div>
+                    </div>
+
+                    <div id="postmortem-content" style="background: #F9FAFB; border: 1px solid var(--border); border-radius: 12px; padding: 24px; font-size: 14px; line-height: 1.6; max-height: 400px; overflow-y: auto; text-align: left; color: #1E293B;">
+                        <!-- Rendered Postmortem HTML will go here -->
+                    </div>
+                </div>
+                
+                <div id="postmortem-placeholder" class="verdict-card" style="grid-template-columns: 1fr;">
+                    <div class="empty-hint" style="text-align: center; margin-top: 0; padding: 40px 0;">
+                        No postmortem report generated yet. Run remediation first to resolve the active incident.
+                    </div>
+                </div>
+            </div>
+
+            <!-- TAB PANE: SWARM SETTINGS -->
+            <div id="pane-settings" class="tab-pane hidden">
+                <div class="settings-card">
+                    <h2 style="margin: 0; font-size: 14px; color: var(--fg-muted); text-transform: uppercase; letter-spacing: 0.1em; border-bottom: 1px solid var(--border); padding-bottom: 16px;">
+                        ⚙️ Coordinated Swarm Configuration
+                    </h2>
+                    
+                    <div class="settings-grid">
+                        <div class="settings-group">
+                            <h3 style="font-size: 13px; color: var(--accent); margin: 0 0 12px 0; text-transform: uppercase;">Confidence Weight Allocations</h3>
+                            
+                            <div class="setting-row">
+                                <label>
+                                    <span>Metrics Agent Weight</span>
+                                    <span id="val-weight-metrics">25%</span>
+                                </label>
+                                <input type="range" id="weight-metrics" min="0" max="50" value="25" oninput="updateSettingLabel('metrics', this.value)">
+                            </div>
+                            
+                            <div class="setting-row">
+                                <label>
+                                    <span>Logs Agent Weight</span>
+                                    <span id="val-weight-logs">25%</span>
+                                </label>
+                                <input type="range" id="weight-logs" min="0" max="50" value="25" oninput="updateSettingLabel('logs', this.value)">
+                            </div>
+                            
+                            <div class="setting-row">
+                                <label>
+                                    <span>Change Agent Weight</span>
+                                    <span id="val-weight-change">25%</span>
+                                </label>
+                                <input type="range" id="weight-change" min="0" max="50" value="25" oninput="updateSettingLabel('change', this.value)">
+                            </div>
+                            
+                            <div class="setting-row">
+                                <label>
+                                    <span>Runbook Agent Weight</span>
+                                    <span id="val-weight-runbook">15%</span>
+                                </label>
+                                <input type="range" id="weight-runbook" min="0" max="30" value="15" oninput="updateSettingLabel('runbook', this.value)">
+                            </div>
+
+                            <div class="setting-row">
+                                <label>
+                                    <span>Deliberation Weight</span>
+                                    <span id="val-weight-delib">10%</span>
+                                </label>
+                                <input type="range" id="weight-delib" min="0" max="20" value="10" oninput="updateSettingLabel('delib', this.value)">
+                            </div>
+                        </div>
+
+                        <div class="settings-group">
+                            <h3 style="font-size: 13px; color: var(--accent); margin: 0 0 12px 0; text-transform: uppercase;">Custom Swarm System Prompts</h3>
+                            
+                            <div class="setting-row">
+                                <label>Commander Agent System Prompt</label>
+                                <textarea id="prompt-commander">You are the Incident Commander. Orchestrate triage by fanning out tasks to metrics, logs, change, and runbook agents. Synthesize findings, calculate confidence scores, and recommend remediation actions.</textarea>
+                            </div>
+                            
+                            <div class="setting-row">
+                                <label>Analysis Swarm Guidelines</label>
+                                <textarea id="prompt-swarm">Analyze incident alert context. Parse service snapshots, exception logs, deploys, and runbooks. Discuss root causes via the deliberation channel using protocol verbs [AGREE], [CHALLENGE], [CONNECT].</textarea>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div style="border-top: 1px solid var(--border); padding-top: 20px; display: flex; justify-content: flex-end;">
+                        <button class="btn-primary" style="margin: 0; background: linear-gradient(135deg, #10B981, #059669);" onclick="saveSwarmSettings()">Save Settings</button>
+                    </div>
+                </div>
             </div>
         </div>
 
@@ -667,13 +1045,17 @@
             markActive(id);
             renderHeader(s);
             resetView();
+            updateTopologyNodes(id);
+            switchTab('ops'); // Default back to Live Ops view on selection
             if (run) runTriage();
         }
 
         function resetView() {
             document.getElementById('verdict-section').classList.add('hidden');
             document.getElementById('remediation-section').classList.add('hidden');
+            document.getElementById('remediation-placeholder').classList.remove('hidden');
             document.getElementById('postmortem-section').classList.add('hidden');
+            document.getElementById('postmortem-placeholder').classList.remove('hidden');
             document.getElementById('delib-section').classList.add('hidden');
             document.getElementById('agents-label').classList.add('hidden');
             const grid = document.getElementById('agent-grid');
@@ -718,11 +1100,15 @@
             runBtn.disabled = true;
             document.getElementById('verdict-section').classList.add('hidden');
             document.getElementById('remediation-section').classList.add('hidden');
+            document.getElementById('remediation-placeholder').classList.remove('hidden');
             document.getElementById('postmortem-section').classList.add('hidden');
+            document.getElementById('postmortem-placeholder').classList.remove('hidden');
             document.getElementById('delib-section').classList.add('hidden');
             document.getElementById('agents-label').classList.remove('hidden');
             setStatus('Triage in Progress', 'mitigating');
             grid.innerHTML = '';
+
+            switchTab('swarm'); // Automatically slide to Swarm Deliberation tab
 
             s.agents.forEach((a, i) => {
                 setTimeout(() => {
@@ -759,6 +1145,7 @@
             const remSec = document.getElementById('remediation-section');
             remSec.classList.remove('hidden');
             remSec.classList.add('fade-in');
+            document.getElementById('remediation-placeholder').classList.add('hidden');
             
             // Reset remediation states
             const btn = document.getElementById('run-remediation');
@@ -768,6 +1155,8 @@
             document.getElementById('remediation-status').innerText = 'Pending Human Approval';
             document.getElementById('remediation-actions-container').classList.add('hidden');
             document.getElementById('resolved-banner').classList.add('hidden');
+
+            switchTab('remediation'); // Automatically transition to Remediation Console tab
         }
 
         function renderDeliberation(s) {
@@ -808,7 +1197,7 @@
             
             let remediationChecklist = "";
             s.remediation.forEach(act => {
-                remediationChecklist += `- [x] {act}\n`;
+                remediationChecklist += `- [x] ${act}\n`;
             });
             
             let evidenceTrail = "";
@@ -852,28 +1241,28 @@ ${evidenceTrail.trim()}
             let html = md;
             
             // Convert headers
-            html = html.replace(/^# (.*?)$/gm, '<h1 style="font-size: 20px; font-weight: 800; border-bottom: 1px solid var(--border); padding-bottom: 8px; margin-top: 0; margin-bottom: 16px; color: var(--fg);">$1</h1>');
-            html = html.replace(/^## (.*?)$/gm, '<h2 style="font-size: 15px; font-weight: 700; margin-top: 20px; margin-bottom: 10px; color: var(--fg); border-bottom: 1px dashed var(--border); padding-bottom: 4px;">$1</h2>');
+            html = html.replace(/^# (.*?)$/gm, '<h1 style="font-size: 20px; font-weight: 800; border-bottom: 1px solid var(--border); padding-bottom: 8px; margin-top: 0; margin-bottom: 16px; color: #1E293B;">$1</h1>');
+            html = html.replace(/^## (.*?)$/gm, '<h2 style="font-size: 15px; font-weight: 700; margin-top: 20px; margin-bottom: 10px; color: #1E293B; border-bottom: 1px dashed rgba(0,0,0,0.1); padding-bottom: 4px;">$1</h2>');
             
             // Convert bold
-            html = html.replace(/\*\*(.*?)\*\"/g, '<strong>$1</strong>');
+            html = html.replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>');
             
             // Convert checklists
-            html = html.replace(/^- \[x\] (.*?)$/gm, '<div style="display: flex; align-items: center; gap: 8px; margin-bottom: 6px; font-size: 13px;"><input type="checkbox" checked disabled> <span style="text-decoration: line-through; color: var(--fg-muted);">$1</span></div>');
-            html = html.replace(/^- \[ \] (.*?)$/gm, '<div style="display: flex; align-items: center; gap: 8px; margin-bottom: 6px; font-size: 13px;"><input type="checkbox" disabled> <span>$1</span></div>');
+            html = html.replace(/^- \[x\] (.*?)$/gm, '<div style="display: flex; align-items: center; gap: 8px; margin-bottom: 6px; font-size: 13px;"><input type="checkbox" checked disabled> <span style="text-decoration: line-through; color: #64748B;">$1</span></div>');
+            html = html.replace(/^- \[ \] (.*?)$/gm, '<div style="display: flex; align-items: center; gap: 8px; margin-bottom: 6px; font-size: 13px;"><input type="checkbox" disabled> <span style="color: #334155;">$1</span></div>');
             
             // Convert bullets
-            html = html.replace(/^- (.*?)$/gm, '<li style="margin-left: 16px; margin-bottom: 6px; font-size: 13px; color: var(--fg);">$1</li>');
+            html = html.replace(/^- (.*?)$/gm, '<li style="margin-left: 16px; margin-bottom: 6px; font-size: 13px; color: #334155;">$1</li>');
             
             // Convert numbered lists
-            html = html.replace(/^\d+\. \[ \]\s*(.*?)$/gm, '<div style="display: flex; align-items: center; gap: 8px; margin-bottom: 6px; padding-left: 8px; font-size: 13px;"><input type="checkbox" disabled> <span>$1</span></div>');
+            html = html.replace(/^\d+\. \[ \]\s*(.*?)$/gm, '<div style="display: flex; align-items: center; gap: 8px; margin-bottom: 6px; padding-left: 8px; font-size: 13px;"><input type="checkbox" disabled> <span style="color: #334155;">$1</span></div>');
             
             // Format paragraphs
             html = html.split('\n\n').map(p => {
                 if (p.trim().startsWith('<h') || p.trim().startsWith('<div') || p.trim().startsWith('<li') || p.trim().startsWith('<ul')) {
                     return p;
                 }
-                return `<p style="margin: 0 0 10px 0; font-size: 13px; color: var(--fg-muted);">${p.replace(/\n/g, '<br>')}</p>`;
+                return `<p style="margin: 0 0 10px 0; font-size: 13px; color: #475569;">${p.replace(/\n/g, '<br>')}</p>`;
             }).join('\n');
             
             return html;
@@ -988,6 +1377,7 @@ ${evidenceTrail.trim()}
             const pmSec = document.getElementById('postmortem-section');
             pmSec.classList.remove('hidden');
             pmSec.classList.add('fade-in');
+            document.getElementById('postmortem-placeholder').classList.add('hidden');
             
             // Generate and render postmortem content
             const rawMd = generatePostmortemJS(s, totalMttr);
@@ -999,6 +1389,131 @@ ${evidenceTrail.trim()}
             gitBtn.innerText = 'Commit to Git';
             document.getElementById('git-output-container').classList.add('hidden');
             document.getElementById('git-terminal-lines').innerHTML = '';
+
+            switchTab('postmortem'); // Automatically transition to Postmortem Vault tab
+        }
+
+        // Tab switching logic
+        document.querySelectorAll('.tab-btn').forEach(btn => {
+            btn.addEventListener('click', () => {
+                const tabId = btn.dataset.tab;
+                switchTab(tabId);
+            });
+        });
+
+        function switchTab(tabId) {
+            document.querySelectorAll('.tab-btn').forEach(b => {
+                b.classList.toggle('active', b.dataset.tab === tabId);
+            });
+            document.querySelectorAll('.tab-pane').forEach(pane => {
+                pane.classList.toggle('hidden', pane.id !== `pane-${tabId}`);
+            });
+            if (tabId === 'ops') {
+                setTimeout(drawTopologyConnections, 50);
+            }
+        }
+
+        // Draw topology SVG connection lines
+        function drawTopologyConnections() {
+            const svg = document.getElementById('topo-connections');
+            if (!svg || svg.parentElement.offsetHeight === 0) return;
+            svg.setAttribute('width', svg.parentElement.offsetWidth);
+            svg.setAttribute('height', svg.parentElement.offsetHeight);
+            svg.innerHTML = '';
+
+            const gw = document.getElementById('node-gw');
+            const usr = document.getElementById('node-usr');
+            const pmt = document.getElementById('node-pmt');
+            const vlt = document.getElementById('node-vlt');
+            const db = document.getElementById('node-db');
+
+            function getCenter(el) {
+                return {
+                    x: el.offsetLeft + el.offsetWidth / 2,
+                    y: el.offsetTop + el.offsetHeight / 2
+                };
+            }
+
+            const pGw = getCenter(gw);
+            const pUsr = getCenter(usr);
+            const pPmt = getCenter(pmt);
+            const pVlt = getCenter(vlt);
+            const pDb = getCenter(db);
+
+            const connections = [
+                [pGw, pUsr],
+                [pGw, pPmt],
+                [pUsr, pDb],
+                [pPmt, pVlt]
+            ];
+
+            connections.forEach(([p1, p2]) => {
+                const line = document.createElementNS('http://www.w3.org/2000/svg', 'line');
+                line.setAttribute('x1', p1.x);
+                line.setAttribute('y1', p1.y);
+                line.setAttribute('x2', p2.x);
+                line.setAttribute('y2', p2.y);
+                svg.appendChild(line);
+            });
+        }
+
+        // Update topology node colors/alerts dynamically based on selected scenario
+        function updateTopologyNodes(scenarioId) {
+            const nodes = {
+                'node-gw': document.getElementById('node-gw'),
+                'node-usr': document.getElementById('node-usr'),
+                'node-pmt': document.getElementById('node-pmt'),
+                'node-vlt': document.getElementById('node-vlt'),
+                'node-db': document.getElementById('node-db')
+            };
+
+            // Reset all to healthy
+            for (const key in nodes) {
+                if (nodes[key]) {
+                    nodes[key].className = 'topo-node healthy';
+                    nodes[key].querySelector('.topo-node-status').textContent = 'Healthy';
+                }
+            }
+
+            // Set alert/warning states depending on scenarioId
+            if (scenarioId === 'inc-001') {
+                if (nodes['node-gw']) {
+                    nodes['node-gw'].className = 'topo-node active-alert';
+                    nodes['node-gw'].querySelector('.topo-node-status').textContent = 'Alerting';
+                }
+                if (nodes['node-usr']) {
+                    nodes['node-usr'].className = 'topo-node active-warning';
+                    nodes['node-usr'].querySelector('.topo-node-status').textContent = 'Elevated';
+                }
+            } else if (scenarioId === 'inc-002') {
+                if (nodes['node-usr']) {
+                    nodes['node-usr'].className = 'topo-node active-alert';
+                    nodes['node-usr'].querySelector('.topo-node-status').textContent = 'Alerting';
+                }
+                if (nodes['node-db']) {
+                    nodes['node-db'].className = 'topo-node active-warning';
+                    nodes['node-db'].querySelector('.topo-node-status').textContent = 'Slow';
+                }
+            } else if (scenarioId === 'inc-003') {
+                if (nodes['node-pmt']) {
+                    nodes['node-pmt'].className = 'topo-node active-alert';
+                    nodes['node-pmt'].querySelector('.topo-node-status').textContent = 'Alerting';
+                }
+                if (nodes['node-vlt']) {
+                    nodes['node-vlt'].className = 'topo-node active-alert';
+                    nodes['node-vlt'].querySelector('.topo-node-status').textContent = 'Outage';
+                }
+            }
+        }
+
+        // Settings Pane Functions
+        function updateSettingLabel(agent, val) {
+            document.getElementById(`val-weight-${agent}`).innerText = val + '%';
+        }
+
+        function saveSwarmSettings() {
+            alert('Settings Applied Successfully!\nConfidence weights and customized prompts have been updated in the running Incident swarm.');
+            switchTab('ops'); // Switch back to live ops
         }
 
         function boot() {
@@ -1013,6 +1528,9 @@ ${evidenceTrail.trim()}
             document.getElementById('run-sim').addEventListener('click', runTriage);
             document.getElementById('run-remediation').addEventListener('click', runRemediation);
             document.getElementById('commit-to-git').addEventListener('click', commitToGitSim);
+            
+            window.addEventListener('resize', drawTopologyConnections);
+            setTimeout(drawTopologyConnections, 100);
         }
 
         boot();
