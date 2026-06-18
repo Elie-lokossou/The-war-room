@@ -7,7 +7,7 @@ import time
 sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), "..")))
 
 from lib.band_client import BandClientWrapper
-from lib.models import IncidentAlert, TriageTask, Finding, Severity
+from lib.models import IncidentAlert, TriageTask, Finding, Severity, CommanderVerdict
 
 # Import agent modules
 import agents.commander.main as commander_agent
@@ -188,6 +188,83 @@ def main():
         print(payload["status_page"])
         print(f"\n{BOLD}{CYAN}-- Draft Postmortem --{RESET}")
         print(payload["draft_postmortem"])
+
+        print_header("STAGE 7: HUMAN-IN-THE-LOOP REMEDIATION")
+        from lib.remediation import RemediationEngine
+        engine = RemediationEngine.from_recommendations(payload["incident_id"], actions)
+
+        print(f"{BOLD}Proposed Remediation Plan:{RESET}")
+        for idx, act in enumerate(engine.plan.actions):
+            sev_color = RED if act.severity == "CRITICAL" else GREEN
+            print(f"  [{idx+1}] {sev_color}[{act.severity}]{RESET} {BOLD}{act.name}{RESET} - {act.description}")
+            print(f"      {CYAN}Command:{RESET} `{act.simulated_command}` ({act.duration}s)")
+        print()
+
+        choice = input(f"{BOLD}Do you want to execute this remediation plan? (y/n): {RESET}").strip().lower()
+        if choice == 'y':
+            print(f"\n{BOLD}{YELLOW}Executing remediation actions...{RESET}")
+
+            def cli_progress_callback(action, event_type, progress):
+                if event_type == "START":
+                    sev_color = RED if action.severity == "CRITICAL" else GREEN
+                    sys.stdout.write(f"  {sev_color}[{action.severity}]{RESET} {action.name} ... ")
+                    sys.stdout.flush()
+                elif event_type == "PROGRESS":
+                    sys.stdout.write(".")
+                    sys.stdout.flush()
+                elif event_type == "COMPLETED":
+                    sys.stdout.write(f" {GREEN}✅ Done{RESET}\n")
+                    sys.stdout.flush()
+
+            engine.execute(progress_callback=cli_progress_callback)
+            print(f"\n{BOLD}{GREEN}✅ INCIDENT RESOLVED — MTTR: {engine.plan.total_mttr}s — Status: RESOLVED{RESET}")
+        else:
+            print(f"\n{BOLD}{RED}Human declined — incident queued for manual resolution{RESET}")
+
+        # --- STAGE 8: AUTO-POSTMORTEM GENERATION & GIT-OPS COMMIT ---
+        print_header("STAGE 8: AUTO-POSTMORTEM GENERATION & GIT-OPS COMMIT")
+        print(f"{BOLD}📝 Drafting postmortem...{RESET}")
+        time.sleep(1)
+
+        from lib.postmortem_generator import generate_postmortem
+        from lib.git_ops import commit_postmortem, get_commit_url
+
+        # Build Findings list and Deliberation log
+        findings_objs = []
+        for env in findings_queue:
+            findings_objs.append(Finding(**env["payload"]))
+
+        delib_msgs = []
+        for env in deliberation_queue:
+            delib_msgs.append(env["payload"])
+
+        postmortem_md = generate_postmortem(
+            verdict=CommanderVerdict(**payload),
+            findings=findings_objs,
+            deliberation_log=delib_msgs,
+            total_mttr=engine.plan.total_mttr if choice == 'y' else 0.0
+        )
+
+        # Show sections of the postmortem
+        print(f"\n{BOLD}{CYAN}Previewing Postmortem Sections:{RESET}")
+        lines = postmortem_md.split("\n")
+        # Print first 18 lines or key sections
+        for line in lines[:18]:
+            print(f"  {line}")
+        print(f"  {BOLD}... [truncated for CLI preview] ...{RESET}\n")
+
+        # Commit to Git
+        print(f"{BOLD}📤 Committing to git...{RESET}")
+        success, commit_hash = commit_postmortem(payload["incident_id"], postmortem_md)
+        if success:
+            if commit_hash:
+                print(f"{GREEN}✅ Postmortem successfully committed to Git [hash: {commit_hash}]{RESET}")
+                url = get_commit_url(commit_hash)
+                print(f"🔗 Commit URL: {UNDERLINE}{BLUE}{url}{RESET}")
+            else:
+                print(f"{YELLOW}⚠️ Git not available or not a repo. Saved postmortem to file system only.{RESET}")
+        else:
+            print(f"{RED}❌ Failed to save or commit postmortem.{RESET}")
     else:
         print(f"\n{BOLD}{RED}No verdict published by the Commander.{RESET}")
 

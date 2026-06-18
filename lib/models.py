@@ -64,3 +64,20 @@ class CommanderVerdict(BaseModel):
     evidence_ids: List[str] = []
     deliberation_summary: Dict[str, int] = {}
     timestamp: str
+
+class RemediationAction(BaseModel):
+    name: str
+    description: str
+    simulated_command: str
+    severity: str  # e.g., "CRITICAL", "AUTO"
+    duration: float
+    status: str = "PENDING"  # "PENDING", "RUNNING", "COMPLETED", "FAILED"
+    started_at: float = 0.0
+    completed_at: float = 0.0
+
+class RemediationPlan(BaseModel):
+    incident_id: str
+    actions: List[RemediationAction]
+    total_mttr: float = 0.0
+    status: str = "PENDING"  # "PENDING", "RUNNING", "COMPLETED"
+

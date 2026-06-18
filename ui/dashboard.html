@@ -8,28 +8,35 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
-    
     <style>
         :root {
-            --bg: #F9FAFB;
-            --surface: #FFFFFF;
-            --fg: #111827;
-            --fg-muted: #6B7280;
-            --accent: #2563EB; /* Professional Blue */
-            --accent-soft: #EFF6FF;
-            --border: #E5E7EB;
-            --shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.1), 0 1px 2px 0 rgba(0, 0, 0, 0.06);
-            --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+            --bg: #0B132B; /* Dark deep space */
+            --surface: rgba(27, 38, 59, 0.45); /* Sleek slate glass */
+            --fg: #F4F6FC; /* Bright typography */
+            --fg-muted: #8E9AAF; /* Muted text */
+            --accent: #00B4D8; /* Electric blue */
+            --accent-glow: rgba(0, 180, 216, 0.25);
+            --border: rgba(255, 255, 255, 0.06);
+            --shadow: 0 4px 30px rgba(0, 0, 0, 0.4);
+            --shadow-lg: 0 10px 40px rgba(0, 0, 0, 0.6);
             --radius: 12px;
+            --radius-lg: 16px;
             --font-sans: 'Inter', -apple-system, sans-serif;
             --font-mono: 'JetBrains Mono', monospace;
+            
+            --success: #10B981;
+            --warning: #F59E0B;
+            --danger: #EF4444;
         }
 
         * { box-sizing: border-box; }
 
         body {
             margin: 0;
-            background-color: var(--bg);
+            background-color: #070A13;
+            background-image: 
+                radial-gradient(at 0% 0%, rgba(0, 180, 216, 0.15) 0px, transparent 60%),
+                radial-gradient(at 100% 100%, rgba(16, 185, 129, 0.08) 0px, transparent 60%);
             color: var(--fg);
             font-family: var(--font-sans);
             -webkit-font-smoothing: antialiased;
@@ -40,58 +47,98 @@
 
         /* --- Sidebar --- */
         .sidebar {
-            width: 300px;
-            background: var(--surface);
+            width: 320px;
+            background: rgba(10, 15, 30, 0.75);
+            backdrop-filter: blur(20px);
             border-right: 1px solid var(--border);
             display: flex;
             flex-direction: column;
-            padding: 32px 24px;
+            padding: 36px 24px;
         }
 
         .logo {
-            font-weight: 700;
-            font-size: 18px;
-            letter-spacing: -0.02em;
+            font-weight: 800;
+            font-size: 20px;
+            letter-spacing: 0.05em;
             display: flex;
             align-items: center;
-            gap: 10px;
+            gap: 12px;
             margin-bottom: 48px;
+            color: var(--fg);
+            text-transform: uppercase;
         }
 
         .logo-icon {
-            width: 24px;
-            height: 24px;
-            background: var(--accent);
+            width: 26px;
+            height: 26px;
+            background: linear-gradient(135deg, var(--accent), var(--success));
             border-radius: 6px;
+            box-shadow: 0 0 12px var(--accent);
+            position: relative;
+        }
+        
+        .logo-icon::after {
+            content: '';
+            position: absolute;
+            top: 25%;
+            left: 25%;
+            width: 50%;
+            height: 50%;
+            background: rgba(255,255,255,0.8);
+            border-radius: 50%;
         }
 
         .nav-group { margin-bottom: 32px; }
         .nav-label {
-            font-size: 12px;
-            font-weight: 600;
+            font-size: 11px;
+            font-weight: 700;
             color: var(--fg-muted);
             text-transform: uppercase;
-            letter-spacing: 0.05em;
+            letter-spacing: 0.1em;
             margin-bottom: 16px;
         }
 
         .alert-item {
-            padding: 12px 16px;
+            padding: 16px;
             border-radius: var(--radius);
-            margin-bottom: 8px;
+            margin-bottom: 12px;
             cursor: pointer;
-            transition: all 0.2s;
-            border: 1px solid transparent;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            background: rgba(255, 255, 255, 0.02);
+            border: 1px solid var(--border);
+            position: relative;
+            overflow: hidden;
         }
 
-        .alert-item.active {
-            background: var(--accent-soft);
-            color: var(--accent);
-            border-color: rgba(37, 99, 235, 0.1);
+        .alert-item::before {
+            content: '';
+            position: absolute;
+            left: 0;
+            top: 0;
+            bottom: 0;
+            width: 4px;
+            background: var(--danger);
+            box-shadow: 0 0 8px var(--danger);
+            transition: width 0.2s;
         }
 
         .alert-item:not(.active):hover {
-            background: #F3F4F6;
+            background: rgba(255, 255, 255, 0.05);
+            border-color: rgba(255, 255, 255, 0.12);
+            transform: translateX(4px);
+        }
+
+        .alert-item.active {
+            background: rgba(0, 180, 216, 0.08);
+            color: var(--fg);
+            border-color: var(--accent);
+            box-shadow: 0 0 15px rgba(0, 180, 216, 0.1);
+        }
+
+        .alert-item.active::before {
+            width: 6px;
+            background: var(--accent);
+            box-shadow: 0 0 10px var(--accent);
         }
 
         .alert-title { font-size: 14px; font-weight: 600; }
@@ -100,61 +147,100 @@
         /* --- Main Content --- */
         .main {
             flex: 1;
-            padding: 64px 80px;
+            padding: 48px 64px;
             overflow-y: auto;
+            background: transparent;
         }
 
         .header {
-            max-width: 900px;
-            margin-bottom: 48px;
+            max-width: 1000px;
+            margin-bottom: 40px;
         }
 
         .status-badge {
             display: inline-flex;
             align-items: center;
-            gap: 6px;
-            padding: 4px 12px;
-            background: #FEF3C7;
-            color: #92400E;
-            font-size: 12px;
-            font-weight: 600;
+            gap: 8px;
+            padding: 6px 16px;
+            background: rgba(245, 158, 11, 0.1);
+            border: 1px solid rgba(245, 158, 11, 0.2);
+            color: var(--warning);
+            font-size: 11px;
+            font-weight: 700;
             border-radius: 99px;
-            margin-bottom: 16px;
+            margin-bottom: 20px;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
         }
 
-        .status-dot { width: 6px; height: 6px; background: currentColor; border-radius: 50%; }
+        .status-dot { 
+            width: 8px; 
+            height: 8px; 
+            background: currentColor; 
+            border-radius: 50%;
+            box-shadow: 0 0 8px currentColor;
+            animation: pulse 1.5s infinite ease-in-out;
+        }
+        
+        @keyframes pulse {
+            0% { transform: scale(0.9); opacity: 0.6; }
+            50% { transform: scale(1.15); opacity: 1; }
+            100% { transform: scale(0.9); opacity: 0.6; }
+        }
 
         h1 {
-            font-size: 36px;
+            font-size: 32px;
             font-weight: 800;
-            letter-spacing: -0.03em;
-            margin: 0 0 16px 0;
-            color: #111827;
+            letter-spacing: -0.02em;
+            margin: 0 0 12px 0;
+            color: var(--fg);
         }
 
         .description {
-            font-size: 16px;
+            font-size: 15px;
             color: var(--fg-muted);
-            line-height: 1.5;
-            max-width: 600px;
+            line-height: 1.6;
+            max-width: 700px;
         }
 
         /* --- Verdict Card --- */
         .verdict-card {
             background: var(--surface);
+            backdrop-filter: blur(16px);
             border: 1px solid var(--border);
-            border-radius: 20px;
-            padding: 40px;
+            border-radius: var(--radius-lg);
+            padding: 32px;
             box-shadow: var(--shadow-lg);
-            margin-bottom: 48px;
-            max-width: 900px;
+            margin-bottom: 32px;
+            max-width: 1000px;
             display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 40px;
+            grid-template-columns: 1.2fr 0.8fr;
+            gap: 32px;
+            transition: all 0.3s ease;
+        }
+        
+        .verdict-card:hover {
+            border-color: rgba(255, 255, 255, 0.1);
         }
 
-        .verdict-main h2 { font-size: 14px; color: var(--fg-muted); text-transform: uppercase; letter-spacing: 0.1em; margin-bottom: 16px; }
-        .verdict-content { font-size: 20px; font-weight: 600; line-height: 1.4; color: var(--fg); }
+        .verdict-main h2 { 
+            font-size: 12px; 
+            color: var(--fg-muted); 
+            text-transform: uppercase; 
+            letter-spacing: 0.1em; 
+            margin-top: 0;
+            margin-bottom: 16px; 
+        }
+        .verdict-content { 
+            font-size: 18px; 
+            font-weight: 600; 
+            line-height: 1.5; 
+            color: var(--fg); 
+            background: rgba(255, 255, 255, 0.02);
+            padding: 16px;
+            border-radius: var(--radius);
+            border: 1px solid var(--border);
+        }
 
         .action-list { list-style: none; padding: 0; margin: 0; }
         .action-item {
@@ -162,65 +248,96 @@
             align-items: center;
             gap: 12px;
             padding: 12px 16px;
-            background: #F9FAFB;
+            background: rgba(255, 255, 255, 0.02);
             border: 1px solid var(--border);
             border-radius: 10px;
-            margin-bottom: 8px;
-            font-size: 14px;
-            font-weight: 500;
+            margin-bottom: 10px;
+            font-size: 13px;
+            font-weight: 600;
+            color: var(--fg);
+            transition: all 0.2s;
+        }
+        .action-item:hover {
+            background: rgba(255, 255, 255, 0.05);
+            border-color: rgba(255, 255, 255, 0.12);
+            transform: translateX(4px);
         }
 
         /* --- Agent Grid --- */
         .agent-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            grid-template-columns: repeat(auto-fill, minmax(230px, 1fr));
             gap: 24px;
-            max-width: 900px;
+            max-width: 1000px;
+            margin-bottom: 32px;
         }
 
         .agent-card {
-            background: var(--surface);
+            background: rgba(27, 38, 59, 0.3);
             border: 1px solid var(--border);
             border-radius: var(--radius);
             padding: 24px;
-            transition: transform 0.2s, box-shadow 0.2s;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            position: relative;
+            overflow: hidden;
         }
 
-        .agent-card:hover { transform: translateY(-2px); box-shadow: var(--shadow); }
+        .agent-card:hover { 
+            transform: translateY(-4px); 
+            background: rgba(27, 38, 59, 0.5);
+            border-color: rgba(0, 180, 216, 0.3);
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.3);
+        }
 
         .agent-header {
             display: flex;
             justify-content: space-between;
-            margin-bottom: 20px;
+            align-items: center;
+            margin-bottom: 16px;
         }
 
-        .agent-name { font-size: 12px; font-weight: 600; color: var(--fg-muted); text-transform: uppercase; }
-        .agent-status { font-size: 12px; font-weight: 600; color: var(--accent); }
+        .agent-name { font-size: 11px; font-weight: 700; color: var(--fg-muted); text-transform: uppercase; letter-spacing: 0.05em; }
+        .agent-status { font-size: 11px; font-weight: 700; color: var(--accent); }
 
-        .agent-summary { font-size: 16px; font-weight: 600; margin-bottom: 8px; }
-        .agent-detail { font-size: 14px; color: var(--fg-muted); line-height: 1.5; margin-bottom: 20px; }
+        .agent-summary { font-size: 15px; font-weight: 700; margin-bottom: 8px; color: var(--fg); }
+        .agent-detail { font-size: 13px; color: var(--fg-muted); line-height: 1.5; margin-bottom: 18px; }
 
-        .progress-bar { height: 6px; background: #F3F4F6; border-radius: 3px; overflow: hidden; }
-        .progress-fill { height: 100%; background: var(--accent); width: 0%; transition: width 1s ease-out; }
+        .progress-bar { height: 4px; background: rgba(255, 255, 255, 0.06); border-radius: 2px; overflow: hidden; }
+        .progress-fill { height: 100%; background: var(--accent); width: 0%; box-shadow: 0 0 8px var(--accent); transition: width 1s ease-out; }
 
         /* --- Animations --- */
         .hidden { display: none !important; }
-        .fade-in { animation: fadeIn 0.6s ease forwards; }
-        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+        .fade-in { animation: fadeIn 0.5s ease-out forwards; }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(12px); } to { opacity: 1; transform: translateY(0); } }
 
         button.btn-primary {
-            background: var(--fg);
+            background: linear-gradient(135deg, var(--accent), #0077B6);
             color: white;
             border: none;
-            padding: 12px 24px;
+            padding: 14px 28px;
             border-radius: 8px;
-            font-weight: 600;
+            font-weight: 700;
+            font-size: 13px;
+            letter-spacing: 0.03em;
             cursor: pointer;
-            transition: background 0.2s;
-            margin-top: auto;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            box-shadow: 0 4px 15px rgba(0, 180, 216, 0.2);
+            text-transform: uppercase;
         }
 
-        button.btn-primary:hover { background: #000; }
+        button.btn-primary:hover:not(:disabled) { 
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(0, 180, 216, 0.35);
+            filter: brightness(1.1);
+        }
+        
+        button.btn-primary:disabled {
+            background: rgba(255, 255, 255, 0.05);
+            color: rgba(255, 255, 255, 0.2);
+            box-shadow: none;
+            cursor: not-allowed;
+            transform: none;
+        }
     </style>
 </head>
 <body>
@@ -277,6 +394,56 @@
                 </div>
             </div>
 
+            <!-- REMEDIATION PANEL -->
+            <div id="remediation-section" class="verdict-card hidden" style="grid-template-columns: 1fr; margin-top: 24px;">
+                <div style="display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid var(--border); padding-bottom: 16px; margin-bottom: 16px;">
+                    <div>
+                        <h2 style="margin: 0; font-size: 14px; color: var(--fg-muted); text-transform: uppercase; letter-spacing: 0.1em;">Remediation Engine</h2>
+                        <div id="remediation-status" style="font-size: 18px; font-weight: 600; color: var(--fg); margin-top: 4px;">Pending Human Approval</div>
+                    </div>
+                    <button id="run-remediation" class="btn-primary" style="margin: 0;">▶ Run Remediation</button>
+                </div>
+                <div id="remediation-actions-container" class="hidden">
+                    <h2 style="font-size: 12px; color: var(--fg-muted); text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 12px;">Executing Actions</h2>
+                    <div id="remediation-steps" style="display: flex; flex-direction: column; gap: 12px;">
+                        <!-- Steps will be generated here -->
+                    </div>
+                </div>
+                <div id="resolved-banner" class="hidden" style="background: #D1FAE5; border: 1px solid #10B981; border-radius: 12px; padding: 20px; display: flex; align-items: center; justify-content: space-between; margin-top: 16px; animation: fadeIn 0.4s ease;">
+                    <div style="display: flex; align-items: center; gap: 12px;">
+                        <span style="font-size: 24px;">✅</span>
+                        <div>
+                            <div style="font-size: 16px; font-weight: 700; color: #065F46;">Incident Resolved Successfully</div>
+                            <div style="font-size: 14px; color: #047857;">All automated remediation procedures completed.</div>
+                        </div>
+                    </div>
+                    <div style="text-align: right;">
+                        <div style="font-size: 12px; font-weight: 600; color: #047857; text-transform: uppercase;">Simulated MTTR</div>
+                        <div id="mttr-display" style="font-size: 24px; font-weight: 800; color: #065F46;">--</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- POSTMORTEM PANEL -->
+            <div id="postmortem-section" class="verdict-card hidden" style="grid-template-columns: 1fr; margin-top: 24px;">
+                <div style="display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid var(--border); padding-bottom: 16px; margin-bottom: 16px;">
+                    <div>
+                        <h2 style="margin: 0; font-size: 14px; color: var(--fg-muted); text-transform: uppercase; letter-spacing: 0.1em;">Incident Documentation</h2>
+                        <div style="font-size: 18px; font-weight: 600; color: var(--fg); margin-top: 4px;">📄 Generated Postmortem Report</div>
+                    </div>
+                    <button id="commit-to-git" class="btn-primary" style="margin: 0; background: var(--accent);">Commit to Git</button>
+                </div>
+                
+                <div id="git-output-container" class="hidden" style="background: #1F2937; border-radius: 8px; padding: 16px; font-family: var(--font-mono); font-size: 13px; color: #F3F4F6; margin-bottom: 20px; border: 1px solid #374151; max-height: 250px; overflow-y: auto;">
+                    <div style="color: #9CA3AF; margin-bottom: 8px; font-size: 11px; font-weight: bold; text-transform: uppercase;">Git Terminal Output</div>
+                    <div id="git-terminal-lines"></div>
+                </div>
+
+                <div id="postmortem-content" style="background: #F9FAFB; border: 1px solid var(--border); border-radius: 12px; padding: 24px; font-size: 14px; line-height: 1.6; max-height: 400px; overflow-y: auto; text-align: left;">
+                    <!-- Rendered Postmortem HTML will go here -->
+                </div>
+            </div>
+
             <div class="agent-grid" id="agent-grid">
                 <!-- Agents -->
             </div>
@@ -291,11 +458,67 @@
             { name: 'Runbook', summary: 'Playbook Matched', detail: 'Correlation with "High Latency - Resource Scaling" guide.', conf: 81 }
         ];
 
+        const REMEDIATION_DB = {
+            "Rollback last deployment": {
+                description: "Reverting the application version to the previous stable release.",
+                command: "git-ops rollback --env prod --deploy 847",
+                severity: "CRITICAL",
+                duration: 2.5
+            },
+            "Check container logs for specific crash reason": {
+                description: "Querying stderr from active containers to extract crash logs.",
+                command: "kubectl logs -l app=api-gateway --tail=100 -n prod",
+                severity: "AUTO",
+                duration: 1.2
+            },
+            "Scale up resources": {
+                description: "Increasing the deployment replicas to distribute latency load.",
+                command: "kubectl scale deployment api-gateway --replicas=4 -n prod",
+                severity: "AUTO",
+                duration: 1.8
+            },
+            "Inspect underlying infrastructure health": {
+                description: "Querying cloud provider metrics for network or disk anomalies.",
+                command: "aws ec2 describe-instance-status --region us-east-1",
+                severity: "AUTO",
+                duration: 1.0
+            },
+            "Monitor service closely": {
+                description: "Enabling high-frequency logging and healthchecks on the service.",
+                command: "datadog-cli monitor status --id check-api-gateway",
+                severity: "AUTO",
+                duration: 1.5
+            },
+            "Close incident if symptoms subside": {
+                description: "Auto-closing incident ticket and resolving active pager alerts.",
+                command: "pd-cli incident resolve --id inc-001",
+                severity: "AUTO",
+                duration: 0.8
+            }
+        };
+
+        function getRemediationAction(name) {
+            for (const key in REMEDIATION_DB) {
+                if (name.toLowerCase().includes(key.toLowerCase()) || key.toLowerCase().includes(name.toLowerCase())) {
+                    return { name, ...REMEDIATION_DB[key] };
+                }
+            }
+            return {
+                name: name,
+                description: `Executing recommended step: ${name}`,
+                command: `run-mitigation --task "${name}"`,
+                severity: "AUTO",
+                duration: 1.0
+            };
+        }
+
         function runSim() {
             document.getElementById('welcome').classList.add('hidden');
             document.getElementById('incident-room').classList.remove('hidden');
             document.getElementById('agent-grid').innerHTML = '';
             document.getElementById('verdict-section').classList.add('hidden');
+            document.getElementById('remediation-section').classList.add('hidden');
+            document.getElementById('postmortem-section').classList.add('hidden');
             document.getElementById('status-badge').style.background = '#FEF3C7';
             document.getElementById('status-badge').style.color = '#92400E';
             document.getElementById('status-badge').querySelector('span').innerText = 'Triage in Progress';
@@ -342,9 +565,238 @@
                 item.innerHTML = `<span>→</span> ${act}`;
                 list.appendChild(item);
             });
+
+            // Show remediation panel
+            const remSec = document.getElementById('remediation-section');
+            remSec.classList.remove('hidden');
+            remSec.classList.add('fade-in');
+            
+            // Reset remediation states
+            const btn = document.getElementById('run-remediation');
+            btn.classList.remove('hidden');
+            btn.disabled = false;
+            btn.innerText = '▶ Run Remediation';
+            document.getElementById('remediation-status').innerText = 'Pending Human Approval';
+            document.getElementById('remediation-actions-container').classList.add('hidden');
+            document.getElementById('resolved-banner').classList.add('hidden');
+        }
+
+        function animateProgress(progressBarFill, duration, onComplete) {
+            let start = null;
+            function step(timestamp) {
+                if (!start) start = timestamp;
+                let progress = (timestamp - start) / (duration * 1000);
+                if (progress < 1) {
+                    progressBarFill.style.width = (progress * 100) + '%';
+                    window.requestAnimationFrame(step);
+                } else {
+                    progressBarFill.style.width = '100%';
+                    onComplete();
+                }
+            }
+            window.requestAnimationFrame(step);
+        }
+
+        function generatePostmortemJS(incidentId, mttr) {
+            const dateStr = new Date().toISOString().split('T')[0];
+            return `# Postmortem: ${incidentId} — ${dateStr}
+
+## Summary
+Infrastructure scaling required. No code-level regressions detected.
+
+## Timeline
+- **14:30:00 UTC**: Incident Alert Ingested
+- **14:31:00 UTC**: Triage assigned to Metrics, Logs, Change, and Runbook agents
+- **14:33:00 UTC**: Deliberation channel discussions completed (4 messages)
+- **14:35:00 UTC**: Commander Verdict published (Status: RESOLVED, Confidence: 0.85)
+- **14:35:10 UTC**: Automated Remediation executed successfully (MTTR: ${mttr}s)
+
+## Root Cause
+API Gateway connection pool saturation leading to elevated latency.
+
+## Severity
+- **Level**: SEV-2
+- **Confidence Score**: 0.85
+
+## Remediation Actions
+- [x] Scale up API-Tier x4
+- [x] Inspect DB connection pool
+- [x] Notify SRE On-call
+
+## Evidence Trail
+- **EVD-MT-001**: metrics-agent (anomaly - connection_pool_exhaustion)
+- **EVD-LG-002**: logs-agent (log_anomaly - connection_pool_exhaustion)
+- **EVD-CH-003**: change-agent (no_recent_changes - none)
+- **EVD-RB-004**: runbook-agent (runbook_match - runbook_stale)
+
+## Deliberation Summary
+- **AGREE**: 2
+- **CHALLENGE**: 0
+- **CONNECT**: 1
+- **SURFACE**: 1
+
+## Action Items
+1. [ ] Implement automated regression tests for root cause.
+2. [ ] Review and update runbook instructions for SEV-2 incidents.
+3. [ ] Configure high-frequency alerting thresholds on affected metrics.
+`;
+        }
+
+        function renderMarkdownToHtml(md) {
+            let html = md;
+            
+            // Convert headers
+            html = html.replace(/^# (.*?)$/gm, '<h1 style="font-size: 20px; font-weight: 800; border-bottom: 1px solid var(--border); padding-bottom: 8px; margin-top: 0; margin-bottom: 16px; color: var(--fg);">$1</h1>');
+            html = html.replace(/^## (.*?)$/gm, '<h2 style="font-size: 15px; font-weight: 700; margin-top: 20px; margin-bottom: 10px; color: var(--fg); border-bottom: 1px dashed var(--border); padding-bottom: 4px;">$1</h2>');
+            
+            // Convert bold
+            html = html.replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>');
+            
+            // Convert checklists
+            html = html.replace(/^- \[x\] (.*?)$/gm, '<div style="display: flex; align-items: center; gap: 8px; margin-bottom: 6px; font-size: 13px;"><input type="checkbox" checked disabled> <span style="text-decoration: line-through; color: var(--fg-muted);">$1</span></div>');
+            html = html.replace(/^- \[ \] (.*?)$/gm, '<div style="display: flex; align-items: center; gap: 8px; margin-bottom: 6px; font-size: 13px;"><input type="checkbox" disabled> <span>$1</span></div>');
+            
+            // Convert bullets
+            html = html.replace(/^- (.*?)$/gm, '<li style="margin-left: 16px; margin-bottom: 6px; font-size: 13px; color: var(--fg);">$1</li>');
+            
+            // Convert numbered lists
+            html = html.replace(/^\d+\. \[ \]\s*(.*?)$/gm, '<div style="display: flex; align-items: center; gap: 8px; margin-bottom: 6px; padding-left: 8px; font-size: 13px;"><input type="checkbox" disabled> <span>$1</span></div>');
+            
+            // Format paragraphs
+            html = html.split('\n\n').map(p => {
+                if (p.trim().startsWith('<h') || p.trim().startsWith('<div') || p.trim().startsWith('<li') || p.trim().startsWith('<ul')) {
+                    return p;
+                }
+                return `<p style="margin: 0 0 10px 0; font-size: 13px; color: var(--fg-muted);">${p.replace(/\n/g, '<br>')}</p>`;
+            }).join('\n');
+            
+            return html;
+        }
+
+        async function commitToGitSim() {
+            const btn = document.getElementById('commit-to-git');
+            btn.disabled = true;
+            btn.innerText = 'Committed';
+            
+            const gitContainer = document.getElementById('git-output-container');
+            gitContainer.classList.remove('hidden');
+            
+            const term = document.getElementById('git-terminal-lines');
+            term.innerHTML = '';
+            
+            const lines = [
+                { text: "$ git status", delay: 300, color: "#9CA3AF" },
+                { text: "On branch main\nYour branch is up to date with 'origin/main'.\n\nUntracked files:\n  (use \"git add <file>...\" to include in what will be committed)\n\tpostmortems/inc-001/\n\nnothing added to commit but untracked files present (use \"git add\" to track)", delay: 800 },
+                { text: "$ git add postmortems/inc-001/", delay: 500, color: "#9CA3AF" },
+                { text: "$ git commit -m \"docs: postmortem inc-001\"", delay: 600, color: "#9CA3AF" },
+                { text: "[main abc1234] docs: postmortem inc-001\n 1 file changed, 43 insertions(+)\n create mode 100644 postmortems/inc-001/postmortem.md", delay: 800, color: "#10B981" },
+                { text: "🔗 Commit URL: <a href='https://github.com/vib3withsimran/The-war-room/commit/abc1234' target='_blank' style='color: #60A5FA; text-decoration: underline;'>https://github.com/vib3withsimran/The-war-room/commit/abc1234</a>", delay: 300 }
+            ];
+            
+            for (let i = 0; i < lines.length; i++) {
+                const line = lines[i];
+                await new Promise(resolve => setTimeout(resolve, line.delay));
+                const div = document.createElement('div');
+                div.style.marginBottom = '8px';
+                div.style.whiteSpace = 'pre-wrap';
+                if (line.color) {
+                    div.style.color = line.color;
+                }
+                div.innerHTML = line.text;
+                term.appendChild(div);
+                gitContainer.scrollTop = gitContainer.scrollHeight;
+            }
+        }
+
+        async function runRemediation() {
+            const btn = document.getElementById('run-remediation');
+            btn.disabled = true;
+            btn.innerText = 'Executing...';
+            document.getElementById('remediation-status').innerText = 'Remediation in Progress';
+            
+            const actionsContainer = document.getElementById('remediation-actions-container');
+            actionsContainer.classList.remove('hidden');
+            
+            const stepsDiv = document.getElementById('remediation-steps');
+            stepsDiv.innerHTML = '';
+            
+            const actionNames = ["Scale up API-Tier x4", "Inspect DB connection pool", "Notify SRE On-call"];
+            const mappedActions = actionNames.map(getRemediationAction);
+            
+            // Render all actions
+            mappedActions.forEach((act, idx) => {
+                const card = document.createElement('div');
+                card.className = 'action-item-card fade-in';
+                card.id = `step-card-${idx}`;
+                card.style = "border: 1px solid var(--border); border-radius: 10px; padding: 16px; background: #F9FAFB; display: flex; flex-direction: column; gap: 8px; margin-bottom: 8px;";
+                card.innerHTML = `
+                    <div style="display: flex; justify-content: space-between; align-items: center;">
+                        <div style="display: flex; align-items: center; gap: 8px;">
+                            <span class="step-badge" style="background: ${act.severity === 'CRITICAL' ? '#FEE2E2' : '#EFF6FF'}; color: ${act.severity === 'CRITICAL' ? '#EF4444' : '#2563EB'}; font-size: 10px; font-weight: 700; padding: 2px 6px; border-radius: 4px;">${act.severity}</span>
+                            <span style="font-weight: 600; font-size: 14px; color: var(--fg);">${act.name}</span>
+                        </div>
+                        <span class="step-status" style="font-size: 12px; font-weight: 600; color: var(--fg-muted);">Pending</span>
+                    </div>
+                    <div style="font-size: 12px; color: var(--fg-muted);">${act.description}</div>
+                    <code style="font-family: var(--font-mono); font-size: 11px; background: #F3F4F6; padding: 4px 8px; border-radius: 4px; color: #374151; width: fit-content;">$ ${act.command}</code>
+                    <div class="progress-bar" style="height: 4px; background: #E5E7EB; border-radius: 2px; overflow: hidden; margin-top: 4px;">
+                        <div class="progress-fill" style="width: 0%; height: 100%; background: ${act.severity === 'CRITICAL' ? '#EF4444' : 'var(--accent)'}; transition: width 0.1s linear;"></div>
+                    </div>
+                `;
+                stepsDiv.appendChild(card);
+            });
+            
+            // Execute actions sequentially
+            let startTime = Date.now();
+            for (let i = 0; i < mappedActions.length; i++) {
+                const act = mappedActions[i];
+                const card = document.getElementById(`step-card-${i}`);
+                const statusLabel = card.querySelector('.step-status');
+                const fill = card.querySelector('.progress-fill');
+                
+                statusLabel.innerText = 'Running...';
+                statusLabel.style.color = 'var(--accent)';
+                
+                await new Promise(resolve => {
+                    animateProgress(fill, act.duration, resolve);
+                });
+                
+                statusLabel.innerText = 'Completed ✅';
+                statusLabel.style.color = '#10B981';
+            }
+            
+            let totalMttr = ((Date.now() - startTime) / 1000).toFixed(1);
+            
+            // Final states
+            btn.classList.add('hidden');
+            document.getElementById('remediation-status').innerText = 'Remediation Complete';
+            document.getElementById('resolved-banner').classList.remove('hidden');
+            document.getElementById('mttr-display').innerText = `${totalMttr}s`;
+            
+            document.getElementById('status-badge').style.background = '#D1FAE5';
+            document.getElementById('status-badge').style.color = '#065F46';
+            document.getElementById('status-badge').querySelector('span').innerText = 'Incident Resolved';
+
+            // Show postmortem panel
+            const pmSec = document.getElementById('postmortem-section');
+            pmSec.classList.remove('hidden');
+            pmSec.classList.add('fade-in');
+            
+            // Generate and render postmortem content
+            const rawMd = generatePostmortemJS("inc-001", totalMttr);
+            document.getElementById('postmortem-content').innerHTML = renderMarkdownToHtml(rawMd);
+            
+            // Reset Git commit states
+            const gitBtn = document.getElementById('commit-to-git');
+            gitBtn.disabled = false;
+            gitBtn.innerText = 'Commit to Git';
+            document.getElementById('git-output-container').classList.add('hidden');
+            document.getElementById('git-terminal-lines').innerHTML = '';
         }
 
         document.getElementById('run-sim').addEventListener('click', runSim);
+        document.getElementById('run-remediation').addEventListener('click', runRemediation);
+        document.getElementById('commit-to-git').addEventListener('click', commitToGitSim);
     </script>
 </body>
 </html>

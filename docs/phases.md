@@ -9,7 +9,7 @@
 | 2 | Analysis agents (all 4) | DONE | — |
 | 3 | Commander verdict | DONE (part of Phase 4) | — |
 | 4 | Evidence + scoring + artifact system | DONE | — |
-| 5 | Real data pipeline | **TODO** | ~3h |
+| 5 | Real data pipeline | DONE | — |
 | 6 | Dashboard & presentation | **TODO** | ~8h |
 
 ---
@@ -75,7 +75,7 @@
 
 ---
 
-## Phase 5 — Real Data Pipeline 🔴 TODO
+## Phase 5 — Real Data Pipeline ✅
 
 **Goal**: Replace keyword-scanning with actual data file reads so agents produce realistic, data-driven findings.
 

@@ -34,7 +34,7 @@
 - Files: `lib/evidence.py`, `lib/scorer.py`, `lib/artifact_generator.py`,
   `agents/commander/main.py`
 
-## Phase 5 — Real Data Pipeline
+## Phase 5 — Real Data Pipeline ✅
 - Replace keyword-scanning with real data sources
 - Parse CSV logs, metrics APIs, deployment webhooks
 - Realistic demo scenarios (3+ incident scripts)
